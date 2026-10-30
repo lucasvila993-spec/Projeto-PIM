@@ -1,0 +1,8 @@
+# Compilador baixado e executaveis gerados
+.web/tools/
+*.exe
+
+# Dados gerados pelo programa
+pacientes.txt
+agenda.txt
+fila.txt

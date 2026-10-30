@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NYLT Agenda</title>
+<style>
+  :root { --bg:#0f1419; --panel:#161b22; --fg:#d6e2ea; --accent:#4fc3a1; --muted:#7d8b96; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font-family: Consolas, "Cascadia Mono", monospace; height:100vh; display:flex; flex-direction:column; }
+  header { padding:12px 20px; background:var(--panel); border-bottom:1px solid #222b33; display:flex; justify-content:space-between; align-items:center; }
+  header b { color:var(--accent); }
+  header span { color:var(--muted); font-size:13px; }
+  button { background:transparent; color:var(--accent); border:1px solid var(--accent); border-radius:4px; padding:4px 10px; cursor:pointer; font:inherit; font-size:13px; }
+  #term { flex:1; overflow-y:auto; padding:16px 20px; white-space:pre-wrap; font-size:15px; line-height:1.4; }
+  .typed { color:var(--accent); }
+  form { display:flex; gap:8px; padding:12px 20px; background:var(--panel); border-top:1px solid #222b33; }
+  form label { color:var(--accent); }
+  input { flex:1; background:transparent; border:none; outline:none; color:var(--fg); font:inherit; font-size:15px; }
+</style>
+</head>
+<body>
+<header><div><b>NYLT Agenda</b> <span>— Saúde NYLT · PIM II</span></div><button id="restart">Reiniciar programa</button></header>
+<div id="term"></div>
+<form id="f"><label>&gt;</label><input id="in" autocomplete="off" autofocus placeholder="digite e pressione Enter"></form>
+<script>
+const term = document.getElementById('term'), inp = document.getElementById('in');
+let id, es;
+function append(text, cls) {
+  const span = document.createElement('span');
+  if (cls) span.className = cls;
+  span.textContent = text;
+  term.appendChild(span);
+  term.scrollTop = term.scrollHeight;
+}
+function connect() {
+  if (es) es.close();
+  term.textContent = '';
+  id = Math.random().toString(36).slice(2);
+  es = new EventSource('/stream?id=' + id);
+  es.addEventListener('out', e => append(JSON.parse(e.data)));
+  es.addEventListener('exit', e => { append('\n[' + JSON.parse(e.data) + ' Clique em "Reiniciar programa".]\n', 'typed'); es.close(); });
+}
+document.getElementById('f').onsubmit = e => {
+  e.preventDefault();
+  const v = inp.value; inp.value = '';
+  append(v + '\n', 'typed');
+  fetch('/input?id=' + id, { method: 'POST', body: v });
+};
+document.getElementById('restart').onclick = () => { connect(); inp.focus(); };
+document.body.onclick = () => { if (!getSelection().toString()) inp.focus(); };
+connect();
+</script>
+</body>
+</html>
