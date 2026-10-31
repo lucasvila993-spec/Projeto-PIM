@@ -4,6 +4,11 @@ Sistema de agendamento da clínica Saúde NYLT, em C (PIM II — ADS — UNIP).
 
 **Grupo:** Lucas Vila da Silva, Nicolas Paranhos Lambiase de Matos, Tiago Araujo De Jesus, Yuri Lima Moreira da Silva.
 
+## Site no ar
+
+- **Vercel:** https://nylt.vercel.app (cada push no `main` publica de novo)
+- **GitHub Pages:** https://lucasvila993-spec.github.io/Projeto-PIM/home/
+
 ## Site (localhost)
 
 Precisa só do Node.js (nenhuma instalação de pacotes). Na pasta do projeto:
