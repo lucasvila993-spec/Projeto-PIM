@@ -1,0 +1,9 @@
+{
+  "name": "nylt-agenda",
+  "version": "1.0.0",
+  "description": "Site da Clínica Saúde NYLT (PIM II, ADS, UNIP): landing, login, área do paciente e recepção.",
+  "private": true,
+  "scripts": {
+    "start": "node servidor.js"
+  }
+}

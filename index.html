@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clínica NYLT | Psicologia, nutrição e fisioterapia no Tatuapé</title>
+<meta name="description" content="Psicologia, nutrição e fisioterapia no Tatuapé, Zona Leste de SP. Marque pelo site e cancele com um clique. Atendimento social às 16h e 17h.">
+<meta name="theme-color" content="#1B2F48">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Clínica Saúde NYLT">
+<meta property="og:title" content="Clínica NYLT: cuidado perto de casa, na Zona Leste">
+<meta property="og:description" content="Psicologia, nutrição e fisioterapia no Tatuapé, com agenda online e atendimento social a valor simbólico.">
+<meta property="og:image" content="assets/logo-nylt-original.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/logo-marca-transparente.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Dados estruturados: clinica (SEO local) e perguntas frequentes -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalClinic",
+  "name": "Clínica Saúde NYLT",
+  "description": "Clínica de psicologia, nutrição e fisioterapia no Tatuapé, com agenda online e atendimento social a valor simbólico às 16h e 17h.",
+  "telephone": "+55-11-2091-4400",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Rua Tuiuti, 1200",
+    "addressLocality": "São Paulo",
+    "addressRegion": "SP",
+    "postalCode": "03307-000",
+    "addressCountry": "BR"
+  },
+  "areaServed": { "@type": "Place", "name": "Zona Leste de São Paulo" },
+  "medicalSpecialty": ["Psychiatric", "DietNutrition", "Physiotherapy"],
+  "availableService": [
+    { "@type": "MedicalTherapy", "name": "Psicologia" },
+    { "@type": "MedicalTherapy", "name": "Nutrição" },
+    { "@type": "MedicalTherapy", "name": "Fisioterapia" }
+  ],
+  "openingHoursSpecification": [{
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    "opens": "10:00",
+    "closes": "18:00"
+  }]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Quanto custa uma consulta?",
+      "acceptedAnswer": { "@type": "Answer", "text": "As consultas particulares, de 10h às 15h, têm o valor informado pela recepção na hora de confirmar. No atendimento social, às 16h e 17h, a família paga um valor simbólico." } },
+    { "@type": "Question", "name": "Como entro no atendimento social?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No cadastro, marque a opção de atendimento social. Depois, na sua área, informe a renda por pessoa da família para entrar na fila. A recepção avalia a urgência e chama pela ordem de pontos." } },
+    { "@type": "Question", "name": "Posso cancelar ou remarcar?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Sim. Em Minhas consultas, cancele com um clique e marque outro horário. Avise o quanto antes: o horário volta para a agenda e outra pessoa pode usar." } },
+    { "@type": "Question", "name": "Preciso confirmar a consulta?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Pedimos que confirme pelo site perto do dia. Assim a recepção sabe quem vem e consegue oferecer os horários de quem não puder ir." } },
+    { "@type": "Question", "name": "O que levar na primeira consulta?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Um documento com foto e, se tiver, exames e receitas recentes. Chegue dez minutos antes para a recepção conferir o seu cadastro." } }
+  ]
+}
+</script>
+
+<script>document.documentElement.classList.add('js');</script>
+<style>
+  /* ---------- Marca NYLT: azul-marinho, dourado, creme e branco; Montserrat ---------- */
+  :root {
+    --branco: #FFFFFF; --creme: #F6F5F1; --creme-2: #EFEDE6;
+    --tinta: #1B2F48; --tinta-2: #44566E; --azul-2: #2A4465;
+    --ouro: #B08D5B; --ouro-claro: #D6B57A; --ouro-suave: #F3EBDC; --ouro-texto: #7A5E33;
+    --linha: #E3DFD5;
+    --max: 1200px;
+    --m: clamp(20px, 4vw, 48px);
+    --secao: clamp(80px, 10vw, 136px);
+    --raio: 14px;
+    --sai: cubic-bezier(.16, 1, .3, 1);
+    /* cinco tamanhos de letra: titulo, secao, destaque, texto, nota */
+    --t1: clamp(36px, 4.6vw, 56px);
+    --t2: clamp(28px, 3vw, 40px);
+    --t3: 20px;
+    --t4: 17px;
+    --t5: 15px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+  body { margin: 0; background: var(--branco); color: var(--tinta); font: 400 var(--t4)/1.6 Montserrat, "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  img, svg { display: block; max-width: 100%; }
+  a { color: inherit; }
+  a[href^="tel:"] { white-space: nowrap; }
+  :focus-visible { outline: 3px solid var(--ouro); outline-offset: 3px; }
+  .sr { position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .pular { position: absolute; left: var(--m); top: -60px; z-index: 60; background: var(--tinta); color: var(--branco); padding: 10px 16px; border-radius: 8px; }
+  .pular:focus { top: 12px; }
+  .conteiner { max-width: var(--max); margin: 0 auto; padding: 0 var(--m); }
+  h1, h2, h3 { margin: 0; line-height: 1.15; letter-spacing: -.015em; }
+  h1 { font-size: var(--t1); font-weight: 700; }
+  h2 { font-size: var(--t2); font-weight: 700; }
+  h3 { font-size: var(--t3); font-weight: 600; }
+  p { margin: 0; }
+  .intro { font-size: var(--t3); line-height: 1.55; color: var(--tinta); max-width: 54ch; }
+
+  /* ---------- Botoes ---------- */
+  .botao { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 26px; border-radius: 99px; border: 2px solid var(--tinta); background: var(--tinta); color: var(--branco); font: 600 var(--t4)/1 Montserrat, sans-serif; text-decoration: none; cursor: pointer; transition: background .2s, border-color .2s, transform .15s; }
+  .botao:hover { background: var(--azul-2); border-color: var(--azul-2); }
+  .botao:active { transform: scale(.97); }
+  .botao.claro { background: transparent; color: var(--tinta); }
+  .botao.claro:hover { background: var(--ouro-suave); border-color: var(--ouro); }
+  .botao.ouro { background: var(--ouro-claro); border-color: var(--ouro-claro); color: var(--tinta); }
+  .botao.ouro:hover { background: #E2C48C; border-color: #E2C48C; }
+  .botao.pequeno { min-height: 44px; padding: 0 20px; font-size: var(--t5); }
+  .link-seta { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; color: var(--tinta); }
+  .link-seta span { transition: transform .2s var(--sai); }
+  .link-seta:hover span { transform: translateX(4px); }
+  .link-seta:hover { color: var(--ouro-texto); }
+
+  /* ---------- Cabecalho fixo ---------- */
+  /* barra do topo em azul-marinho, como o rodape, para se destacar do conteudo */
+  .cabecalho { position: sticky; top: 0; z-index: 40; background: var(--tinta); color: var(--branco); }
+  .cabecalho .conteiner { display: flex; align-items: center; gap: 28px; min-height: 76px; }
+  .marca { display: flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 700; font-size: var(--t3); letter-spacing: .06em; color: var(--branco); }
+  .marca .selo { display: grid; place-items: center; width: 50px; height: 50px; border-radius: 50%; background: var(--creme); }
+  .marca img { width: 38px; height: auto; }
+  .menu { display: flex; gap: 26px; margin-left: auto; }
+  .menu a { position: relative; text-decoration: none; font-weight: 500; font-size: var(--t5); color: #D5DCE6; padding: 6px 0; }
+  .menu a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--ouro-claro); transform: scaleX(0); transform-origin: left; transition: transform .25s var(--sai); }
+  .menu a:hover { color: var(--branco); }
+  .menu a:hover::after { transform: scaleX(1); }
+  .acoes { display: flex; align-items: center; gap: 12px; }
+  .cabecalho .botao { background: var(--ouro-claro); border-color: var(--ouro-claro); color: var(--tinta); }
+  .cabecalho .botao:hover { background: #E2C48C; border-color: #E2C48C; }
+  .cabecalho .botao.claro { background: transparent; border-color: rgba(255, 255, 255, .55); color: var(--branco); }
+  .cabecalho .botao.claro:hover { border-color: var(--branco); background: var(--azul-2); }
+  .cabecalho :focus-visible { outline-color: var(--ouro-claro); }
+
+  /* ---------- Topo: texto e o coracao com a semana ---------- */
+  .topo { padding: clamp(32px, 6vw, 80px) 0 var(--secao); }
+  .topo .conteiner { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .topo h1 { max-width: 14ch; }
+  .topo .intro { margin-top: 22px; }
+  .topo-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 32px; }
+  .garantia { margin-top: 22px; font-size: var(--t5); color: var(--tinta-2); }
+  .garantia b { color: var(--tinta); font-weight: 600; }
+  .semana { position: relative; margin: 0; }
+  .semana svg { width: 100%; height: auto; }
+  .semana .dia-rotulo { font: 600 13px Montserrat, sans-serif; fill: var(--tinta-2); }
+  .cartao-vivo { position: absolute; left: -3%; top: 2%; background: var(--creme); border-radius: var(--raio); padding: 16px 20px; max-width: 280px; }
+  .cartao-vivo p { font-size: var(--t5); color: var(--tinta-2); }
+  .cartao-vivo strong { display: block; font-size: var(--t3); color: var(--tinta); margin-top: 2px; }
+  .cartao-vivo .ponto { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #3E8E5A; margin-right: 8px; vertical-align: 1px; animation: pulsa 2.4s ease-in-out infinite; }
+  @keyframes pulsa { 50% { opacity: .35; } }
+  .legenda-semana { margin-top: 18px; font-size: var(--t5); color: var(--tinta-2); text-align: center; }
+  .legenda-semana p { margin-bottom: 10px; }
+  .legenda-semana ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 18px; }
+  .legenda-semana li { display: flex; align-items: center; gap: 8px; }
+  .legenda-semana i { width: 14px; height: 14px; border-radius: 4px; }
+
+  /* ---------- Especialidades com o proximo horario livre ---------- */
+  .especialidades { background: var(--creme); padding: var(--secao) 0; }
+  .cabeca-secao { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px 64px; align-items: end; margin-bottom: 48px; }
+  .cabeca-secao .intro { font-size: var(--t4); }
+  .lista-esp { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .esp { display: grid; grid-template-columns: 112px minmax(0, 1.4fr) minmax(0, 1fr) auto; gap: 28px; align-items: center; padding: 22px 0; }
+  .esp + .esp { padding-top: 30px; }
+  .esp:hover .ilustra { background: var(--ouro-claro); }
+  .esp .ilustra { width: 112px; height: 112px; border-radius: 50%; background: var(--branco); display: grid; place-items: center; transition: background .25s; }
+  .esp .ilustra svg { width: 70px; height: 70px; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2.6; }
+  .esp h3 { font-size: 24px; margin-bottom: 6px; }
+  .esp p { color: var(--tinta); }
+  .esp .livre { font-size: var(--t5); color: var(--tinta-2); }
+  .esp .livre strong { display: block; font-size: var(--t3); color: var(--tinta); font-variant-numeric: tabular-nums; }
+  .nota-valores { margin-top: 24px; font-size: var(--t5); color: var(--tinta-2); }
+
+  /* ---------- Atendimento social + simulador ---------- */
+  .social { padding: var(--secao) 0; }
+  .painel-social { background: var(--tinta); color: var(--creme); border-radius: 28px; padding: clamp(32px, 5vw, 64px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 64px); }
+  .painel-social h2 { color: var(--branco); }
+  .painel-social .intro { color: #D5DCE6; margin-top: 18px; font-size: var(--t4); }
+  .quem { margin-top: 28px; padding: 18px 20px; border-radius: var(--raio); background: var(--azul-2); }
+  .quem h3 { color: var(--ouro-claro); font-size: var(--t4); margin-bottom: 6px; }
+  .quem p { font-size: var(--t5); color: #D5DCE6; }
+  .criterios { margin-top: 28px; }
+  .criterios h3 { color: var(--ouro-claro); font-size: var(--t4); margin-bottom: 10px; }
+  .criterios dl { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 10px 24px; font-size: var(--t5); }
+  .criterios dt { color: #E7EBF1; }
+  .criterios dd { margin: 0; font-weight: 700; color: var(--ouro-claro); text-align: right; font-variant-numeric: tabular-nums; }
+  .criterios p { margin-top: 16px; font-size: var(--t5); color: #D5DCE6; }
+
+  .simulador { background: var(--branco); color: var(--tinta); border-radius: 20px; padding: clamp(24px, 3vw, 36px); align-self: start; }
+  .simulador h3 { font-size: 24px; }
+  .simulador > p { margin-top: 8px; color: var(--tinta-2); font-size: var(--t5); }
+  .campos { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+  .simulador label { display: block; font-size: var(--t5); font-weight: 600; margin-bottom: 6px; }
+  .simulador input { width: 100%; min-height: 50px; padding: 10px 14px; border: 2px solid var(--linha); border-radius: 12px; background: var(--creme); color: var(--tinta); font: inherit; }
+  .simulador input:focus { border-color: var(--ouro); background: var(--branco); outline: none; }
+  .resultado { margin-top: 24px; padding: 20px; border-radius: var(--raio); background: var(--ouro-suave); }
+  .resultado .total { display: flex; align-items: baseline; gap: 10px; }
+  .resultado .total b { font-size: var(--t1); line-height: 1; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .resultado .total span { font-weight: 600; }
+  .resultado ul { list-style: none; margin: 14px 0 0; padding: 0; font-size: var(--t5); color: var(--ouro-texto); }
+  .resultado li { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; }
+  .aviso-urgencia { margin-top: 14px; font-size: var(--t5); color: var(--tinta-2); }
+  .simulador .botao { margin-top: 22px; width: 100%; }
+
+  /* ---------- Como agendar ---------- */
+  .como { background: var(--creme); padding: var(--secao) 0; }
+  .passos { list-style: none; margin: 48px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; counter-reset: passo; }
+  .passo { position: relative; padding-top: 72px; counter-increment: passo; }
+  .passo::before { content: counter(passo); position: absolute; top: 0; left: 0; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--tinta); color: var(--branco); font-weight: 700; font-size: var(--t3); }
+  .passo:nth-child(4)::before { background: var(--ouro-claro); color: var(--tinta); }
+  .passo::after { content: ""; position: absolute; top: 25px; left: 64px; right: -8px; height: 2px; background: var(--ouro-claro); opacity: .6; }
+  .passo:last-child::after { display: none; }
+  .passo h3 { margin-bottom: 8px; }
+  .passo p { color: var(--tinta); font-size: var(--t5); max-width: 30ch; }
+  .como-cta { margin-top: 48px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
+  .como-cta p { color: var(--tinta-2); font-size: var(--t5); }
+
+  /* ---------- Depoimentos (espacos reservados) ---------- */
+  .depoimentos { padding: var(--secao) 0; }
+  .depoimentos .intro { margin-top: 14px; font-size: var(--t4); }
+  .falas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 40px; }
+  .fala { margin: 0; padding: 28px; border-radius: 20px; background: var(--creme); display: flex; flex-direction: column; }
+  .tag-esp { align-self: flex-start; padding: 4px 12px; border-radius: 99px; background: var(--branco); font-size: var(--t5); font-weight: 600; color: var(--tinta); }
+  .tag-esp.social { background: var(--ouro-suave); color: var(--ouro-texto); }
+  .fala blockquote { margin: 18px 0 0; flex: 1; font-size: var(--t4); line-height: 1.6; color: var(--tinta); }
+  .fala figcaption { display: flex; align-items: center; gap: 12px; margin-top: 22px; font-size: var(--t5); font-weight: 600; }
+  .fala figcaption small { display: block; font-weight: 400; color: var(--tinta-2); }
+  .inicial { flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--tinta); color: var(--ouro-claro); font-weight: 700; }
+  .nota-ficticia { margin-top: 20px; font-size: var(--t5); color: var(--tinta-2); }
+
+  /* ---------- Perguntas frequentes ---------- */
+  .duvidas { background: var(--creme); padding: var(--secao) 0; }
+  .duvidas .conteiner { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 32px 72px; align-items: start; }
+  .duvidas .intro { margin-top: 16px; font-size: var(--t4); }
+  .duvidas .intro a { font-weight: 600; }
+  .faq { display: grid; gap: 12px; }
+  .faq details { background: var(--branco); border-radius: var(--raio); }
+  .faq summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 24px; font-weight: 600; cursor: pointer; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: ""; flex: none; width: 12px; height: 12px; border-right: 2.5px solid var(--ouro); border-bottom: 2.5px solid var(--ouro); transform: rotate(45deg) translate(-3px, -3px); transition: transform .25s var(--sai); }
+  .faq details[open] summary::after { transform: rotate(225deg) translate(-3px, -3px); }
+  .faq summary:hover { color: var(--ouro-texto); }
+  .faq details p { padding: 0 24px 22px; color: var(--tinta); max-width: 62ch; }
+
+  /* ---------- Chamada final ---------- */
+  .final { padding: var(--secao) 0; }
+  .faixa-final { background: var(--ouro-suave); border-radius: 28px; padding: clamp(36px, 6vw, 72px); display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 32px; align-items: center; }
+  .faixa-final h2 { max-width: 18ch; }
+  .faixa-final .intro { margin-top: 14px; }
+  .faixa-final .botoes { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+  .faixa-final .botoes p { font-size: var(--t5); color: var(--tinta-2); }
+  .faixa-final .botoes a:not(.botao) { font-weight: 600; }
+
+  /* ---------- Rodape ---------- */
+  .rodape { background: var(--tinta); color: #D5DCE6; padding: 64px 0 56px; font-size: var(--t5); }
+  .rodape-grade { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 32px; }
+  .rodape .logo-claro { display: inline-flex; align-items: center; gap: 12px; color: var(--branco); font-weight: 700; font-size: var(--t3); letter-spacing: .06em; text-decoration: none; }
+  .rodape .logo-claro span { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: var(--creme); }
+  .rodape .logo-claro img { width: 44px; height: auto; }
+  .rodape-grade > div > p { margin-top: 16px; line-height: 1.7; }
+  .rodape h3 { font-size: var(--t5); color: var(--ouro-claro); margin-bottom: 12px; }
+  .rodape ul { list-style: none; margin: 0; padding: 0; }
+  .rodape li { margin-bottom: 8px; }
+  .rodape a { color: #E7EBF1; text-decoration: none; }
+  .rodape a:hover { color: var(--ouro-claro); }
+  .rodape-fim { margin-top: 56px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; }
+
+
+  /* ---------- Movimento suave ao rolar ---------- */
+  .js [data-revela] { opacity: 0; transform: translateY(24px); }
+  .js [data-revela].visivel { opacity: 1; transform: none; transition: opacity .7s var(--sai), transform .7s var(--sai); transition-delay: calc(var(--n, 0) * 90ms); }
+  .js .semana .celula { opacity: 0; }
+  .js .semana.pronta .celula { opacity: 1; transition: opacity .5s; transition-delay: calc(var(--i) * 18ms); }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .js [data-revela], .js .semana .celula { opacity: 1; transform: none; }
+  }
+
+  /* ---------- Tablet ---------- */
+  @media (max-width: 1024px) {
+    .menu { display: none; }
+    .acoes { margin-left: auto; }
+    .esp { grid-template-columns: 96px minmax(0, 1fr) auto; }
+    .esp .ilustra { width: 96px; height: 96px; }
+    .esp .livre { grid-column: 2; }
+    .esp .link-seta { grid-column: 3; grid-row: 1 / 3; }
+    .passos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 24px; }
+    .passo:nth-child(2)::after { display: none; }
+    .duvidas .conteiner { grid-template-columns: 1fr; }
+  }
+  /* ---------- Celular ---------- */
+  @media (max-width: 760px) {
+    .cabecalho .conteiner { min-height: 64px; gap: 12px; }
+    .marca .selo { width: 42px; height: 42px; }
+    .marca img { width: 32px; }
+    .marca > span:not(.sr):not(.selo) { display: none; }
+    .acoes .entrar { display: none; }
+    .topo { padding-top: 24px; }
+    .topo .conteiner { grid-template-columns: 1fr; }
+    .semana { max-width: 440px; margin: 0 auto; width: 100%; }
+    .cartao-vivo { position: relative; top: auto; left: auto; margin: 16px auto 0; }
+    .cabeca-secao { grid-template-columns: 1fr; margin-bottom: 32px; }
+    .esp { grid-template-columns: 72px minmax(0, 1fr); gap: 12px 18px; padding: 18px 0; }
+    .esp .ilustra { width: 72px; height: 72px; }
+    .esp .ilustra svg { width: 46px; height: 46px; }
+    .esp .livre, .esp .link-seta { grid-column: 1 / -1; grid-row: auto; }
+    .esp .livre { padding-top: 4px; }
+    .painel-social { grid-template-columns: 1fr; border-radius: 22px; }
+    .campos { grid-template-columns: 1fr; }
+    .passos { grid-template-columns: 1fr; gap: 28px; }
+    .passo { padding: 4px 0 0 72px; min-height: 52px; }
+    .passo::after { display: none; }
+    .falas { grid-template-columns: 1fr; }
+    .faixa-final { grid-template-columns: 1fr; border-radius: 22px; }
+    .rodape-grade { grid-template-columns: 1fr 1fr; }
+    .rodape-grade > div:first-child { grid-column: 1 / -1; }
+  }
+</style>
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<!-- Desenhos da marca usados nas especialidades -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- psicologia: dois baloes de conversa que formam um coracao -->
+    <symbol id="i-psico" viewBox="0 0 64 64"><path d="M32 52C20 44 8 36 8 24a11 11 0 0 1 24-5" stroke="#1B2F48"/><path d="M32 52c12-8 24-16 24-28a11 11 0 0 0-24-5" stroke="#B08D5B"/><path d="M22 26h4M38 26h4M28 34c2.5 2 5.5 2 8 0" stroke="#1B2F48"/></symbol>
+    <!-- nutricao: maca com folha -->
+    <symbol id="i-nutri" viewBox="0 0 64 64"><path d="M32 20c-6-4-20-3-20 14 0 12 9 22 15 22 2 0 3-1 5-1s3 1 5 1c6 0 15-10 15-22 0-17-14-18-20-14z" stroke="#1B2F48"/><path d="M32 20c0-6 3-10 8-12" stroke="#1B2F48"/><path d="M34 14c4-6 12-6 14-4-2 6-9 8-14 4z" stroke="#B08D5B"/><path d="M26 32v10M32 30v14M38 32v10" stroke="#B08D5B"/></symbol>
+    <!-- fisioterapia: mao amparando uma coluna -->
+    <symbol id="i-fisio" viewBox="0 0 64 64"><path d="M32 8v6M32 20v6M32 32v6" stroke="#1B2F48" stroke-width="5"/><path d="M10 40c6 0 10 4 14 6h12c3 0 3 4 0 4h-9M10 54c8 0 14 2 22 2 6 0 12-4 20-12 2-2-1-5-4-3l-10 7" stroke="#B08D5B"/></symbol>
+  </defs>
+</svg>
+
+<header class="cabecalho" id="cabecalho">
+  <div class="conteiner">
+    <a class="marca" href="#topo"><span class="selo"><img src="assets/logo-marca-transparente.webp" alt="" width="200" height="141"></span><span>NYLT</span><span class="sr"> Clínica Saúde NYLT, início</span></a>
+    <nav class="menu" aria-label="Seções da página">
+      <a href="#especialidades">Especialidades</a>
+      <a href="#social">Atendimento social</a>
+      <a href="#como">Como agendar</a>
+      <a href="#duvidas">Dúvidas</a>
+    </nav>
+    <div class="acoes" id="acoes">
+      <a class="botao claro pequeno entrar" href="/entrar">Entrar</a>
+      <a class="botao pequeno" href="/entrar#cadastro">Cadastrar-se</a>
+    </div>
+  </div>
+</header>
+
+<main id="conteudo">
+  <!-- ===== Topo ===== -->
+  <section class="topo" id="topo" aria-labelledby="titulo">
+    <div class="conteiner">
+      <div>
+        <h1 id="titulo" data-revela>Cuidado perto de casa</h1>
+        <p class="intro" data-revela style="--n:1">Psicologia, nutrição e fisioterapia no Tatuapé, Zona Leste de São Paulo. Veja os horários livres, marque pelo site e confirme ou cancele com um clique. Às 16h e 17h, atendimento social a valor simbólico.</p>
+        <div class="topo-acoes" data-revela style="--n:2">
+          <a class="botao" href="/entrar#cadastro">Agendar consulta</a>
+          <a class="link-seta" href="#especialidades">Ver horários livres <span aria-hidden="true">→</span></a>
+        </div>
+        <p class="garantia" data-revela style="--n:3"><b>Cadastro em dois minutos.</b> Segunda a sexta, das 10h às 17h.</p>
+      </div>
+
+      <!-- O coracao da logo vira a semana da clinica: 5 dias x 8 horarios, as duas ultimas linhas sao do social -->
+      <figure class="semana" id="semana" aria-label="Coração da NYLT formado pela semana da clínica: segunda a sexta, das 10h às 17h, com 16h e 17h em dourado, reservadas ao atendimento social">
+        <svg viewBox="0 0 520 470" aria-hidden="true">
+          <defs>
+            <clipPath id="coracao"><path d="M260 452C140 372 24 290 24 168 24 96 82 40 152 40c46 0 84 24 108 60 24-36 62-60 108-60 70 0 128 56 128 128 0 122-116 204-236 284z"/></clipPath>
+          </defs>
+          <g id="grade" clip-path="url(#coracao)"></g>
+          <path d="M260 452C140 372 24 290 24 168 24 96 82 40 152 40c46 0 84 24 108 60 24-36 62-60 108-60 70 0 128 56 128 128 0 122-116 204-236 284z" fill="none" stroke="#B08D5B" stroke-width="6"/>
+          <g id="rotulos"></g>
+        </svg>
+        <div class="cartao-vivo" aria-live="polite">
+          <p><span class="ponto" aria-hidden="true"></span>Próximo horário livre</p>
+          <strong id="proximoGeral">Psicologia, segunda às 10h</strong>
+        </div>
+        <div class="legenda-semana" aria-hidden="true">
+          <p>Cada quadradinho é um horário da semana, de segunda a sexta.</p>
+          <ul>
+            <li><i style="background:#C7D3E2"></i>Livre</li>
+            <li><i style="background:#7F95B4"></i>Poucas vagas</li>
+            <li><i style="background:#2A4465"></i>Lotado</li>
+            <li><i style="background:#E8D3AA"></i>Dourado: social, 16h e 17h</li>
+          </ul>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===== Especialidades com o proximo horario livre ===== -->
+  <section class="especialidades" id="especialidades" aria-labelledby="espTitulo">
+    <div class="conteiner">
+      <div class="cabeca-secao">
+        <h2 id="espTitulo" data-revela>Três especialidades, um só cadastro</h2>
+        <p class="intro" data-revela style="--n:1">Os horários abaixo são lidos agora da agenda da clínica. Escolha uma especialidade e marque em poucos cliques.</p>
+      </div>
+      <ul class="lista-esp">
+        <li class="esp" data-revela>
+          <div class="ilustra"><svg aria-hidden="true"><use href="#i-psico"/></svg></div>
+          <div><h3>Psicologia</h3><p>Para ansiedade, tristeza, luto e conflitos em casa ou no trabalho. Um espaço seguro para falar e ser ouvido.</p></div>
+          <p class="livre">Próximo horário livre<strong data-prox="0">segunda, 10h</strong></p>
+          <a class="link-seta" href="/entrar#cadastro">Marcar <span aria-hidden="true">→</span><span class="sr"> psicologia</span></a>
+        </li>
+        <li class="esp" data-revela style="--n:1">
+          <div class="ilustra"><svg aria-hidden="true"><use href="#i-nutri"/></svg></div>
+          <div><h3>Nutrição</h3><p>Para comer melhor sem dieta da moda: reeducação alimentar, diabetes, pressão alta, colesterol e alimentação das crianças.</p></div>
+          <p class="livre">Próximo horário livre<strong data-prox="1">segunda, 10h</strong></p>
+          <a class="link-seta" href="/entrar#cadastro">Marcar <span aria-hidden="true">→</span><span class="sr"> nutrição</span></a>
+        </li>
+        <li class="esp" data-revela style="--n:2">
+          <div class="ilustra"><svg aria-hidden="true"><use href="#i-fisio"/></svg></div>
+          <div><h3>Fisioterapia</h3><p>Para dores nas costas e nas articulações, recuperação de lesões e cirurgias, e mais movimento no dia a dia.</p></div>
+          <p class="livre">Próximo horário livre<strong data-prox="2">segunda, 10h</strong></p>
+          <a class="link-seta" href="/entrar#cadastro">Marcar <span aria-hidden="true">→</span><span class="sr"> fisioterapia</span></a>
+        </li>
+      </ul>
+      <p class="nota-valores">Consultas particulares de 10h às 15h, com valor informado pela recepção na confirmação.</p>
+    </div>
+  </section>
+
+  <!-- ===== Atendimento social + simulador ===== -->
+  <section class="social" id="social" aria-labelledby="socialTitulo">
+    <div class="conteiner">
+      <div class="painel-social">
+        <div data-revela>
+          <h2 id="socialTitulo">16h e 17h são de quem mais precisa</h2>
+          <p class="intro">De segunda a sexta, as duas últimas horas da agenda são de famílias de baixa renda, que pagam um valor simbólico. Não passa na frente quem chega primeiro, e sim quem soma mais pontos, com regras que qualquer pessoa pode conferir.</p>
+          <div class="quem">
+            <h3>Quem pode participar</h3>
+            <p>Famílias de baixa renda, em qualquer especialidade. Marque a opção no cadastro e a recepção confirma a sua participação.</p>
+          </div>
+          <div class="criterios">
+            <h3>Como os pontos são contados</h3>
+            <dl>
+              <dt>Renda por pessoa até R$ 300</dt><dd>+40</dd>
+              <dt>Renda por pessoa até R$ 700</dt><dd>+25</dd>
+              <dt>Renda por pessoa até R$ 1.500</dt><dd>+10</dd>
+              <dt>60 anos ou mais</dt><dd>+20</dd>
+              <dt>Menos de 12 anos</dt><dd>+15</dd>
+              <dt>Urgência, de 1 a 3, avaliada pela recepção</dt><dd>+10 por nível</dd>
+            </dl>
+            <p>Empate mantém a ordem de chegada, e toda decisão pode ser revisada por uma pessoa da recepção.</p>
+          </div>
+        </div>
+
+        <form class="simulador" id="simulador" data-revela style="--n:1" aria-labelledby="simTitulo" novalidate>
+          <h3 id="simTitulo">Simule a sua pontuação</h3>
+          <p>Uma conta rápida, sem cadastro. Nada do que você digitar aqui é enviado.</p>
+          <div class="campos">
+            <div><label for="simRenda">Renda por pessoa (R$)</label><input id="simRenda" type="number" inputmode="decimal" min="0" step="1" placeholder="Ex.: 450"></div>
+            <div><label for="simIdade">Idade do paciente</label><input id="simIdade" type="number" inputmode="numeric" min="0" max="120" placeholder="Ex.: 62"></div>
+          </div>
+          <div class="resultado" aria-live="polite">
+            <p class="total"><b id="simTotal">0</b><span>pontos iniciais</span></p>
+            <ul id="simDetalhe">
+              <li><span>Renda</span><span>+0</span></li>
+              <li><span>Idade</span><span>+0</span></li>
+            </ul>
+          </div>
+          <p class="aviso-urgencia">A recepção soma a urgência (de +10 a +30) depois de conversar com você.</p>
+          <a class="botao ouro" href="/entrar#cadastro-social">Pedir vaga no social</a>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Como agendar ===== -->
+  <section class="como" id="como" aria-labelledby="comoTitulo">
+    <div class="conteiner">
+      <div class="cabeca-secao" style="margin-bottom:0">
+        <h2 id="comoTitulo" data-revela>Agende em quatro passos</h2>
+        <p class="intro" data-revela style="--n:1">Tudo pelo site, de casa ou do celular. Se preferir, a recepção também marca por telefone.</p>
+      </div>
+      <ol class="passos">
+        <li class="passo" data-revela><h3>Cadastre-se</h3><p>Nome, telefone, idade e uma senha. Se a recepção já tem o seu cadastro, use o mesmo telefone.</p></li>
+        <li class="passo" data-revela style="--n:1"><h3>Escolha o horário</h3><p>Escolha a especialidade e veja a semana inteira, com os horários livres de 10h às 15h.</p></li>
+        <li class="passo" data-revela style="--n:2"><h3>Confirme a presença</h3><p>Perto do dia, confirme pelo site. Não vai poder ir? Cancele com um clique e libere o horário.</p></li>
+        <li class="passo" data-revela style="--n:3"><h3>Venha à clínica</h3><p>Chegue dez minutos antes com um documento com foto. A gente cuida do resto.</p></li>
+      </ol>
+      <div class="como-cta" data-revela>
+        <a class="botao" href="/entrar#cadastro">Criar meu cadastro</a>
+        <p>Cancelar é grátis e leva um clique.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Depoimentos (exemplos: a NYLT e uma clinica ficticia do PIM) ===== -->
+  <section class="depoimentos" aria-labelledby="depTitulo">
+    <div class="conteiner">
+      <h2 id="depTitulo" data-revela>O que dizem nossos pacientes</h2>
+      <p class="intro" data-revela style="--n:1">Gente da Zona Leste que já marcou consulta pelo site.</p>
+      <div class="falas">
+        <figure class="fala" data-revela><span class="tag-esp">Psicologia</span><blockquote><p>“Eu adiava a terapia porque nunca conseguia ligar no horário da recepção. Marquei pelo celular, numa noite, em dois minutos. Hoje vou toda quinta.”</p></blockquote><figcaption><span class="inicial" aria-hidden="true">M</span><span>Mariana Oliveira, 29 anos<small>Penha</small></span></figcaption></figure>
+        <figure class="fala" data-revela style="--n:1"><span class="tag-esp">Nutrição</span><blockquote><p>“Depois do diagnóstico de diabetes, aprendi a montar o prato sem cortar tudo o que eu gosto. E quando preciso trocar o dia, cancelo pelo site e escolho outro.”</p></blockquote><figcaption><span class="inicial" aria-hidden="true">J</span><span>José Carlos Santos, 63 anos<small>Tatuapé</small></span></figcaption></figure>
+        <figure class="fala" data-revela style="--n:2"><span class="tag-esp social">Fisioterapia, atendimento social</span><blockquote><p>“Entrei na fila do social depois da cirurgia no joelho. Deu para ver os critérios e entender por que fui chamada. Em três semanas já estava sendo atendida às 16h.”</p></blockquote><figcaption><span class="inicial" aria-hidden="true">A</span><span>Antônia Ferreira, 71 anos<small>São Miguel Paulista</small></span></figcaption></figure>
+      </div>
+      <p class="nota-ficticia">Depoimentos fictícios, criados para o projeto acadêmico da Clínica NYLT.</p>
+    </div>
+  </section>
+
+  <!-- ===== Perguntas frequentes ===== -->
+  <section class="duvidas" id="duvidas" aria-labelledby="duvTitulo">
+    <div class="conteiner">
+      <div data-revela>
+        <h2 id="duvTitulo">Dúvidas frequentes</h2>
+        <p class="intro">Não achou a sua? Ligue para <a href="tel:+551120914400">(11) 2091-4400</a>, de segunda a sexta, das 10h às 17h.</p>
+      </div>
+      <div class="faq" data-revela style="--n:1">
+        <details open><summary>Quanto custa uma consulta?</summary><p>As consultas particulares, de 10h às 15h, têm o valor informado pela recepção na hora de confirmar. No atendimento social, às 16h e 17h, a família paga um valor simbólico.</p></details>
+        <details><summary>Como entro no atendimento social?</summary><p>No cadastro, marque a opção de atendimento social. Depois, na sua área, informe a renda por pessoa da família para entrar na fila. A recepção avalia a urgência e chama pela ordem de pontos.</p></details>
+        <details><summary>Posso cancelar ou remarcar?</summary><p>Sim. Em Minhas consultas, cancele com um clique e marque outro horário. Avise o quanto antes: o horário volta para a agenda e outra pessoa pode usar.</p></details>
+        <details><summary>Preciso confirmar a consulta?</summary><p>Pedimos que confirme pelo site perto do dia. Assim a recepção sabe quem vem e consegue oferecer os horários de quem não puder ir.</p></details>
+        <details><summary>O que levar na primeira consulta?</summary><p>Um documento com foto e, se tiver, exames e receitas recentes. Chegue dez minutos antes para a recepção conferir o seu cadastro.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Chamada final ===== -->
+  <section class="final" aria-labelledby="finalTitulo">
+    <div class="conteiner">
+      <div class="faixa-final" data-revela>
+        <div>
+          <h2 id="finalTitulo">Comece pelo cadastro</h2>
+          <p class="intro">Leva dois minutos: nome, telefone, idade e uma senha. Depois é só escolher o horário.</p>
+        </div>
+        <div class="botoes">
+          <a class="botao" href="/entrar#cadastro">Cadastrar-se</a>
+          <p>Já tem cadastro? <a href="/entrar">Entrar</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="conteiner">
+    <div class="rodape-grade">
+      <div>
+        <a class="logo-claro" href="#topo"><span><img src="assets/logo-marca-transparente.webp" alt="" width="200" height="141"></span>NYLT</a>
+        <p>Clínica Saúde NYLT<br>Rua Tuiuti, 1200, Tatuapé, São Paulo, SP, 03307-000<br><a href="tel:+551120914400">(11) 2091-4400</a><br>Segunda a sexta, das 10h às 17h</p>
+      </div>
+      <nav aria-label="Clínica"><h3>Clínica</h3><ul><li><a href="#especialidades">Especialidades</a></li><li><a href="#social">Atendimento social</a></li><li><a href="#como">Como agendar</a></li><li><a href="#duvidas">Dúvidas</a></li></ul></nav>
+      <nav aria-label="Pacientes"><h3>Pacientes</h3><ul><li><a href="/entrar">Entrar</a></li><li><a href="/entrar#cadastro">Cadastrar-se</a></li><li><a href="/paciente">Minha área</a></li></ul></nav>
+      <nav aria-label="Equipe"><h3>Equipe</h3><ul><li><a href="/admin">Área da recepção</a></li></ul></nav>
+    </div>
+  </div>
+</footer>
+
+
+<script src="assets/nylt-dados.js"></script>
+<script>
+  const $ = id => document.getElementById(id);
+  const svgNS = 'http://www.w3.org/2000/svg';
+
+  /* ---------- O coracao com a semana: cada quadrado e um horario real da agenda ---------- */
+  function desenharSemana() {
+    const d = NYLT.ler();
+    const grade = $('grade'), rotulos = $('rotulos');
+    grade.innerHTML = ''; rotulos.innerHTML = '';
+    const x0 = 62, y0 = 66, larg = 74, alt = 40, gap = 6;
+    let i = 0;
+    for (let h = 0; h < NYLT.HORARIOS; h++) {
+      for (let dia = 0; dia < NYLT.DIAS.length; dia++) {
+        // quantos profissionais ainda tem esse horario livre
+        const livres = NYLT.PROFISSIONAIS.filter((_, p) => !d.agenda[p][dia][h]).length;
+        const social = h >= NYLT.PRIMEIRO_SOCIAL;
+        // tres estados, iguais a legenda: lotado (0 livres), poucas vagas (1 ou 2), livre (os 3 profissionais livres)
+        const tons = social ? ['#9C7A48', '#C9A266', '#C9A266', '#E8D3AA'] : ['#2A4465', '#7F95B4', '#7F95B4', '#C7D3E2'];
+        const r = document.createElementNS(svgNS, 'rect');
+        r.setAttribute('x', x0 + dia * (larg + gap)); r.setAttribute('y', y0 + h * (alt + gap));
+        r.setAttribute('width', larg); r.setAttribute('height', alt); r.setAttribute('rx', 8);
+        r.setAttribute('fill', tons[livres]);
+        r.setAttribute('class', 'celula');
+        r.style.setProperty('--i', i++);
+        grade.appendChild(r);
+      }
+    }
+  }
+
+  /* ---------- Proximo horario livre de cada especialidade ---------- */
+  function atualizarHorarios() {
+    const d = NYLT.ler();
+    const texto = s => s ? `${NYLT.DIAS[s.d].toLowerCase()}, ${NYLT.hora(s.h)}h` : 'semana cheia';
+    let melhor = null;
+    NYLT.PROFISSIONAIS.forEach((nome, p) => {
+      const s = NYLT.proximoLivre(d, p);
+      document.querySelector(`[data-prox="${p}"]`).textContent = texto(s);
+      if (s && (!melhor || s.d * 10 + s.h < melhor.s.d * 10 + melhor.s.h)) melhor = { s, nome };
+    });
+    $('proximoGeral').textContent = melhor
+      ? `${melhor.nome}, ${NYLT.DIAS[melhor.s.d].toLowerCase()} às ${NYLT.hora(melhor.s.h)}h`
+      : 'Semana cheia, fale com a recepção';
+    desenharSemana();
+  }
+  atualizarHorarios();
+  // se a recepcao ou um paciente marcar uma consulta em outra aba, a pagina se atualiza
+  addEventListener('storage', e => { if (e.key === NYLT.CHAVE) atualizarHorarios(); });
+
+  /* ---------- Paciente que ja entrou ve "Minha area" ---------- */
+  if (NYLT.pacienteAtual()) $('acoes').innerHTML = '<a class="botao pequeno" href="/paciente">Minha área</a>';
+
+  /* ---------- Simulador da fila social (mesma regra do sistema, sem a urgencia) ---------- */
+  function simular() {
+    const renda = parseFloat($('simRenda').value), idade = parseInt($('simIdade').value, 10);
+    const pRenda = isNaN(renda) ? 0 : renda <= 300 ? 40 : renda <= 700 ? 25 : renda <= 1500 ? 10 : 0;
+    const pIdade = isNaN(idade) ? 0 : idade >= 60 ? 20 : idade < 12 ? 15 : 0;
+    $('simTotal').textContent = pRenda + pIdade;
+    $('simDetalhe').innerHTML =
+      `<li><span>Renda${isNaN(renda) ? '' : ` de R$ ${renda.toLocaleString('pt-BR')} por pessoa`}</span><span>+${pRenda}</span></li>` +
+      `<li><span>Idade${isNaN(idade) ? '' : ` de ${idade} anos`}</span><span>+${pIdade}</span></li>`;
+  }
+  ['simRenda', 'simIdade'].forEach(id => $(id).addEventListener('input', simular));
+  $('simulador').addEventListener('submit', e => e.preventDefault());
+
+
+  /* ---------- Entradas suaves ao rolar (o conteudo aparece mesmo sem script) ---------- */
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add(e.target.id === 'semana' ? 'pronta' : 'visivel'); io.unobserve(e.target); }
+    }), { threshold: .15 });
+    document.querySelectorAll('[data-revela], #semana').forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('[data-revela]').forEach(el => el.classList.add('visivel'));
+    $('semana').classList.add('pronta');
+  }
+</script>
+</body>
+</html>

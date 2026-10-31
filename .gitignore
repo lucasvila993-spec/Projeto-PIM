@@ -6,3 +6,11 @@
 pacientes.txt
 agenda.txt
 fila.txt
+
+# Arquivos de trabalho da skill de design
+.taste-skill/
+
+# Configuracao local do editor e site montado para o GitHub Pages
+.claude/
+_site/
+node_modules/

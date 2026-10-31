@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Minha área · Clínica NYLT</title>
+<link rel="icon" href="assets/logo-marca-transparente.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/nylt-app.css">
+<style>
+  /* ---------- Barra do topo ---------- */
+  .topo { position: sticky; top: 0; z-index: 20; background: var(--superficie); border-bottom: 1px solid var(--linha); }
+  .topo-linha { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; gap: 24px; padding: 12px var(--m); }
+  .topo .marca img { width: 64px; height: auto; }
+  .topo nav { display: flex; gap: 4px; flex: 1; }
+  .topo nav a { position: relative; padding: 10px 14px; border-radius: var(--raio); text-decoration: none; font-weight: 500; color: var(--tinta-2); white-space: nowrap; }
+  .topo nav a:hover { color: var(--tinta); background: var(--creme); }
+  .topo nav a[aria-current="page"] { color: var(--tinta); font-weight: 600; }
+  .topo nav a[aria-current="page"]::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: 2px; height: 3px; border-radius: 3px; background: var(--ouro); }
+  .usuario { display: flex; align-items: center; gap: 14px; font-size: .95rem; }
+  .usuario b { font-weight: 600; }
+
+  main { max-width: 1240px; margin: 0 auto; padding: 40px var(--m) 72px; }
+  section[hidden] { display: none; }
+
+  /* ---------- Agendar ---------- */
+  .agendar { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 32px; align-items: start; }
+  .passo { margin-bottom: 36px; }
+  .passo h2 { display: flex; align-items: baseline; gap: 10px; }
+  .especialidades { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .esp { position: relative; display: block; text-align: left; padding: 20px; border: 1px solid var(--linha); border-radius: var(--raio-g); background: var(--superficie); color: var(--tinta); font: inherit; cursor: pointer; transition: border-color .15s, background .15s; }
+  .esp:hover { border-color: var(--ouro-claro); }
+  .esp[aria-checked="true"] { border-color: var(--ouro); background: var(--ouro-suave); box-shadow: inset 0 0 0 1px var(--ouro); }
+  .esp strong { display: block; font-size: 1.15rem; margin-bottom: 4px; }
+  .esp span { display: block; font-size: .88rem; color: var(--tinta-2); }
+  .esp .prox { margin-top: 14px; font-size: .85rem; color: var(--ouro-texto); font-weight: 600; }
+  .esp .marca-sel { position: absolute; top: 16px; right: 16px; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--linha); background: var(--superficie); }
+  .esp[aria-checked="true"] .marca-sel { border-color: var(--ouro); background: var(--ouro) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / 14px no-repeat; }
+
+  .dias { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 18px; }
+  .dia { min-height: 64px; border: 1px solid var(--linha); border-radius: var(--raio); background: var(--superficie); color: var(--tinta); font: inherit; cursor: pointer; padding: 8px 6px; }
+  .dia b { display: block; font-weight: 600; }
+  .dia small { display: block; font-size: .78rem; color: var(--tinta-2); }
+  .dia:hover:not(:disabled) { border-color: var(--ouro-claro); }
+  .dia[aria-pressed="true"] { background: var(--tinta); border-color: var(--tinta); color: var(--creme); }
+  .dia[aria-pressed="true"] small { color: var(--ouro-claro); }
+  .dia:disabled { opacity: .5; cursor: not-allowed; }
+  .horas { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  .hora { min-height: 52px; border: 1px solid var(--linha); border-radius: var(--raio); background: var(--creme); color: var(--tinta); font: inherit; font-weight: 600; font-variant-numeric: tabular-nums; cursor: pointer; transition: border-color .15s, background .15s; }
+  .hora:hover:not(:disabled) { border-color: var(--ouro); background: var(--ouro-suave); }
+  .hora[aria-pressed="true"] { background: var(--ouro); border-color: var(--ouro); color: var(--superficie); }
+  .hora:disabled { background: var(--superficie); color: #A6B0BC; text-decoration: line-through; cursor: not-allowed; font-weight: 500; }
+  .hora small { display: block; font-size: .72rem; font-weight: 500; text-decoration: none; }
+  .aviso-social { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 14px; padding: 14px 16px; border-radius: var(--raio); background: var(--ouro-suave); color: var(--ouro-texto); font-size: .9rem; }
+  .aviso-social a { font-weight: 600; white-space: nowrap; }
+
+  .resumo { position: sticky; top: 104px; }
+  .resumo dl { margin: 0 0 22px; }
+  .resumo dl > div { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--linha); }
+  .resumo dt { color: var(--tinta-2); }
+  .resumo dd { margin: 0; font-weight: 600; text-align: right; }
+  .resumo .vaz { color: #A6B0BC; font-weight: 500; }
+  .sucesso { text-align: center; }
+  .sucesso .icone { width: 56px; height: 56px; margin: 0 auto 14px; border-radius: 50%; background: var(--ok-suave); display: grid; place-items: center; }
+  .sucesso .icone svg { width: 28px; height: 28px; stroke: var(--ok); stroke-width: 2.6; fill: none; }
+  .sucesso p { margin: 6px 0 20px; color: var(--tinta-2); }
+  .sucesso .btn + .btn { margin-top: 10px; }
+
+  /* ---------- Minhas consultas ---------- */
+  .consultas { display: grid; gap: 14px; }
+  .consulta { display: grid; grid-template-columns: 120px 1fr auto; gap: 20px; align-items: center; padding: 18px 20px; border: 1px solid var(--linha); border-radius: var(--raio-g); }
+  .consulta .quando { text-align: center; padding: 10px 6px; border-radius: var(--raio); background: var(--creme); }
+  .consulta .quando b { display: block; font-size: 1.6rem; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .consulta .quando span { font-size: .85rem; color: var(--tinta-2); }
+  .consulta.social .quando { background: var(--ouro-suave); }
+  .consulta h3 { margin: 0 0 6px; font-size: 1.1rem; }
+  .consulta .acoes-c { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+
+  /* ---------- Atendimento social ---------- */
+  .social-grade { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 24px; align-items: start; }
+  .status-fila { display: flex; gap: 24px; align-items: center; }
+  .posicao { flex: none; width: 112px; height: 112px; border-radius: 50%; background: var(--tinta); color: var(--creme); display: grid; place-items: center; text-align: center; line-height: 1.1; }
+  .posicao b { display: block; font-size: 2.4rem; font-weight: 700; }
+  .posicao span { font-size: .8rem; color: var(--ouro-claro); }
+  .criterios { list-style: none; margin: 0; padding: 0; font-size: .92rem; }
+  .criterios li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--linha); }
+  .criterios li:last-child { border-bottom: 0; }
+  .criterios b { color: var(--ouro-texto); white-space: nowrap; }
+  .previa { margin: -6px 0 18px; font-size: .92rem; color: var(--tinta-2); }
+  .previa b { color: var(--ouro-texto); }
+
+  @media (max-width: 960px) {
+    .agendar, .social-grade { grid-template-columns: 1fr; }
+    .resumo { position: static; }
+  }
+  @media (max-width: 720px) {
+    .topo-linha { flex-wrap: wrap; gap: 8px 16px; padding-bottom: 0; }
+    .topo .marca img { width: 52px; }
+    .usuario { margin-left: auto; }
+    .usuario span { display: none; }
+    .topo nav { order: 3; flex: 1 0 100%; overflow-x: auto; margin: 0 calc(var(--m) * -1); padding: 0 calc(var(--m) - 14px); }
+    main { padding-top: 28px; }
+    .especialidades { grid-template-columns: 1fr; }
+    .dias { grid-template-columns: repeat(5, minmax(56px, 1fr)); gap: 6px; }
+    .horas { grid-template-columns: repeat(3, 1fr); }
+    .consulta { grid-template-columns: 92px 1fr; }
+    .consulta .acoes-c { grid-column: 1 / -1; justify-content: stretch; }
+    .consulta .acoes-c .btn { flex: 1; }
+    .status-fila { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="topo-linha">
+    <a class="marca" href="/home" aria-label="NYLT, voltar para o site"><img src="assets/logo-marca-transparente.webp" alt="" width="200" height="141"></a>
+    <nav aria-label="Minha área">
+      <a href="#agendar" data-aba="agendar">Agendar consulta</a>
+      <a href="#consultas" data-aba="consultas">Minhas consultas</a>
+      <a href="#social" data-aba="social">Atendimento social</a>
+    </nav>
+    <div class="usuario"><span>Olá, <b id="nomeUsuario"></b></span><button class="btn ghost sm" id="btnSair">Sair</button></div>
+  </div>
+</header>
+
+<main>
+  <!-- ===== Agendar ===== -->
+  <section id="agendar" aria-labelledby="agendarTitulo">
+    <div class="cabeca">
+      <h1 id="agendarTitulo">Agendar consulta</h1>
+      <p class="sub">Escolha a especialidade, o dia e um horário livre. Os horários são de segunda a sexta, das 10h às 15h.</p>
+    </div>
+    <div class="agendar">
+      <div>
+        <div class="passo">
+          <h2 id="espTitulo">Especialidade</h2>
+          <div class="especialidades" role="radiogroup" aria-labelledby="espTitulo" id="especialidades"></div>
+        </div>
+        <div class="passo">
+          <h2 id="diaTitulo">Dia</h2>
+          <div class="dias" role="group" aria-labelledby="diaTitulo" id="dias"></div>
+          <h2 id="horaTitulo">Horário</h2>
+          <div class="horas" role="group" aria-labelledby="horaTitulo" id="horas"></div>
+          <div class="aviso-social"><span>16h e 17h são reservados ao atendimento social, que funciona pela fila de prioridade.</span><a href="#social">Saiba mais</a></div>
+        </div>
+      </div>
+
+      <aside class="card resumo" aria-live="polite">
+        <div id="resumoForm">
+          <h2>Resumo</h2>
+          <dl>
+            <div><dt>Especialidade</dt><dd id="rEsp"></dd></div>
+            <div><dt>Dia</dt><dd id="rDia"></dd></div>
+            <div><dt>Horário</dt><dd id="rHora"></dd></div>
+          </dl>
+          <button class="btn block" id="btnConfirmar" disabled>Confirmar agendamento</button>
+          <p class="dica" style="text-align:center">Você poderá confirmar a presença ou cancelar em Minhas consultas.</p>
+        </div>
+        <div class="sucesso" id="resumoOk" hidden>
+          <div class="icone"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+          <h2 style="margin-bottom:0">Consulta marcada</h2>
+          <p id="okTexto"></p>
+          <a class="btn block" href="#consultas">Ver minhas consultas</a>
+          <button class="btn ghost block" id="btnOutra">Marcar outra consulta</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===== Minhas consultas ===== -->
+  <section id="consultas" aria-labelledby="consultasTitulo" hidden>
+    <div class="cabeca">
+      <h1 id="consultasTitulo">Minhas consultas</h1>
+      <p class="sub">Confirme a presença para a recepção saber que você vem. Se não puder ir, cancele: o horário volta para a agenda.</p>
+    </div>
+    <div class="consultas" id="listaConsultas"></div>
+  </section>
+
+  <!-- ===== Atendimento social ===== -->
+  <section id="social" aria-labelledby="socialTitulo" hidden>
+    <div class="cabeca">
+      <h1 id="socialTitulo">Atendimento social</h1>
+      <p class="sub">Às 16h e 17h, de segunda a sexta, as consultas são para famílias de baixa renda, a valor simbólico. A vez é de quem tem mais pontos na fila.</p>
+    </div>
+    <div class="social-grade">
+      <div class="card" id="socialPrincipal"></div>
+      <aside class="card">
+        <h2>Como os pontos são contados</h2>
+        <ul class="criterios">
+          <li>Renda por pessoa até R$ 300 <b>+40</b></li>
+          <li>Até R$ 700 <b>+25</b></li>
+          <li>Até R$ 1.500 <b>+10</b></li>
+          <li>60 anos ou mais <b>+20</b></li>
+          <li>Menos de 12 anos <b>+15</b></li>
+          <li>Urgência, de 1 a 3, avaliada pela recepção <b>+10 por nível</b></li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<dialog id="dlgCancelar" aria-labelledby="dlgTitulo">
+  <form method="dialog">
+    <h2 id="dlgTitulo">Cancelar consulta?</h2>
+    <p id="dlgTexto"></p>
+    <div class="acoes">
+      <button class="btn ghost" value="nao">Manter consulta</button>
+      <button class="btn danger" value="sim">Cancelar consulta</button>
+    </div>
+  </form>
+</dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/nylt-dados.js"></script>
+<script>
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const { DIAS, PROFISSIONAIS, PRIMEIRO_SOCIAL, SITUACOES, hora } = NYLT;
+  const DESCRICOES = ['Ansiedade, luto, relações e família', 'Reeducação alimentar e doenças crônicas', 'Dores, lesões e reabilitação'];
+
+  // so entra quem fez login
+  let pac = NYLT.pacienteAtual();
+  if (!pac) location.replace('/entrar');
+  $('nomeUsuario').textContent = pac ? pac.nome.split(' ')[0] : '';
+  $('btnSair').onclick = () => { NYLT.sair(); location.href = '/home'; };
+
+  let toastTimer;
+  function aviso(msg, erro) {
+    const t = $('toast'); t.textContent = msg; t.className = 'show' + (erro ? ' err' : '');
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.className = '', 3500);
+  }
+
+  /* ---------- Abas pelo endereco (#agendar, #consultas, #social) ---------- */
+  function mostrarAba() {
+    const aba = ['agendar', 'consultas', 'social'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'agendar';
+    document.querySelectorAll('main > section').forEach(s => s.hidden = s.id !== aba);
+    document.querySelectorAll('.topo nav a').forEach(a => {
+      if (a.dataset.aba === aba) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    });
+    renderizar();
+    window.scrollTo(0, 0);
+  }
+  addEventListener('hashchange', mostrarAba);
+
+  /* ---------- Agendar ---------- */
+  const escolha = { p: null, d: null, h: null };
+  const ultimoAgendado = { atual: null };
+
+  function renderAgendar() {
+    const d = NYLT.ler();
+    $('especialidades').innerHTML = PROFISSIONAIS.map((nome, p) => {
+      const s = NYLT.proximoLivre(d, p);
+      return `<button class="esp" role="radio" aria-checked="${escolha.p === p}" data-p="${p}" tabindex="${(escolha.p ?? 0) === p ? 0 : -1}">
+        <i class="marca-sel" aria-hidden="true"></i><strong>${nome}</strong><span>${DESCRICOES[p]}</span>
+        <span class="prox">${s ? `Próximo livre: ${DIAS[s.d].toLowerCase()}, ${hora(s.h)}h` : 'Semana sem horários livres'}</span></button>`;
+    }).join('');
+
+    const p = escolha.p;
+    $('dias').innerHTML = DIAS.map((nome, dia) => {
+      const n = p === null ? null : NYLT.livres(d, p).filter(s => s.d === dia).length;
+      return `<button class="dia" data-d="${dia}" aria-pressed="${escolha.d === dia}" ${p === null || n === 0 ? 'disabled' : ''}>
+        <b>${nome.slice(0, 3)}</b><small>${p === null ? '—' : n ? `${n} ${n === 1 ? 'livre' : 'livres'}` : 'cheio'}</small></button>`;
+    }).join('');
+
+    let horas = '';
+    for (let h = 0; h < PRIMEIRO_SOCIAL; h++) {
+      const ocupado = p === null || escolha.d === null || d.agenda[p][escolha.d][h] !== 0;
+      const rotulo = p === null ? 'escolha a especialidade' : escolha.d === null ? 'escolha o dia' : ocupado ? 'ocupado' : 'livre';
+      horas += `<button class="hora" data-h="${h}" aria-pressed="${escolha.h === h}" ${ocupado ? 'disabled' : ''} aria-label="${hora(h)}h, ${rotulo}">${hora(h)}h${ocupado && p !== null && escolha.d !== null ? '<small>ocupado</small>' : ''}</button>`;
+    }
+    $('horas').innerHTML = horas;
+
+    const vazio = t => `<span class="vaz">${t}</span>`;
+    $('rEsp').innerHTML = p === null ? vazio('a escolher') : PROFISSIONAIS[p];
+    $('rDia').innerHTML = escolha.d === null ? vazio('a escolher') : DIAS[escolha.d];
+    $('rHora').innerHTML = escolha.h === null ? vazio('a escolher') : `${hora(escolha.h)}h`;
+    $('btnConfirmar').disabled = p === null || escolha.d === null || escolha.h === null;
+  }
+
+  $('especialidades').addEventListener('click', e => {
+    const b = e.target.closest('.esp'); if (!b) return;
+    escolha.p = +b.dataset.p; escolha.d = null; escolha.h = null;
+    // ja abre no primeiro dia com horario livre
+    const s = NYLT.proximoLivre(NYLT.ler(), escolha.p);
+    if (s) escolha.d = s.d;
+    renderAgendar();
+    document.querySelector(`.esp[data-p="${escolha.p}"]`).focus();
+  });
+  $('especialidades').addEventListener('keydown', e => {
+    if (!['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp'].includes(e.key)) return;
+    e.preventDefault();
+    const atual = escolha.p ?? 0, passo = ['ArrowRight', 'ArrowDown'].includes(e.key) ? 1 : -1;
+    document.querySelector(`.esp[data-p="${(atual + passo + 3) % 3}"]`).click();
+  });
+  $('dias').addEventListener('click', e => {
+    const b = e.target.closest('.dia'); if (!b || b.disabled) return;
+    escolha.d = +b.dataset.d; escolha.h = null; renderAgendar();
+    document.querySelector(`.dia[data-d="${escolha.d}"]`).focus();
+  });
+  $('horas').addEventListener('click', e => {
+    const b = e.target.closest('.hora'); if (!b || b.disabled) return;
+    escolha.h = +b.dataset.h; renderAgendar();
+    document.querySelector(`.hora[data-h="${escolha.h}"]`).focus();
+  });
+
+  $('btnConfirmar').onclick = () => {
+    try {
+      NYLT.agendar(pac.id, escolha.p, escolha.d, escolha.h);
+      $('okTexto').textContent = `${PROFISSIONAIS[escolha.p]}, ${DIAS[escolha.d].toLowerCase()} às ${hora(escolha.h)}h. Confirme a presença perto do dia.`;
+      $('resumoForm').hidden = true; $('resumoOk').hidden = false;
+      escolha.h = null;
+      renderAgendar();
+    } catch (err) { aviso(err.message, true); renderAgendar(); }
+  };
+  $('btnOutra').onclick = () => {
+    Object.assign(escolha, { p: null, d: null, h: null });
+    $('resumoForm').hidden = false; $('resumoOk').hidden = true; renderAgendar();
+  };
+
+  /* ---------- Minhas consultas ---------- */
+  const classeSit = ['', 'confirmada', 'compareceu', 'faltou'];
+  function renderConsultas() {
+    const d = NYLT.ler();
+    const lista = NYLT.consultasDo(d, pac.id);
+    if (!lista.length) {
+      $('listaConsultas').innerHTML = `<div class="card vazio"><p>Você ainda não tem consultas marcadas.</p><a class="btn" href="#agendar">Agendar consulta</a></div>`;
+      return;
+    }
+    $('listaConsultas').innerHTML = lista.map(c => {
+      const social = c.h >= PRIMEIRO_SOCIAL;
+      const pode = c.situacao === NYLT.AGENDADA || c.situacao === NYLT.CONFIRMADA;
+      return `<article class="consulta${social ? ' social' : ''}">
+        <div class="quando"><b>${hora(c.h)}h</b><span>${DIAS[c.d]}</span></div>
+        <div><h3>${PROFISSIONAIS[c.p]}</h3>
+          <span class="tag ${classeSit[c.situacao]}">${SITUACOES[c.situacao]}</span>${social ? ' <span class="tag social">Atendimento social</span>' : ''}</div>
+        <div class="acoes-c">
+          ${c.situacao === NYLT.AGENDADA ? `<button class="btn sm" data-acao="confirmar" data-c="${c.p},${c.d},${c.h}">Confirmar presença</button>` : ''}
+          ${pode ? `<button class="btn danger sm" data-acao="cancelar" data-c="${c.p},${c.d},${c.h}">Cancelar</button>` : ''}
+        </div></article>`;
+    }).join('');
+  }
+  let aCancelar = null;
+  $('listaConsultas').addEventListener('click', e => {
+    const b = e.target.closest('[data-acao]'); if (!b) return;
+    const [p, d, h] = b.dataset.c.split(',').map(Number);
+    if (b.dataset.acao === 'confirmar') {
+      try { NYLT.mudarConsulta(pac.id, p, d, h, 'confirmar'); aviso('Presença confirmada. Até lá!'); }
+      catch (err) { aviso(err.message, true); }
+      renderConsultas();
+    } else {
+      aCancelar = { p, d, h };
+      $('dlgTexto').textContent = `${PROFISSIONAIS[p]}, ${DIAS[d].toLowerCase()} às ${hora(h)}h. O horário volta para a agenda.`;
+      $('dlgCancelar').returnValue = '';
+      $('dlgCancelar').showModal();
+    }
+  });
+  $('dlgCancelar').onclose = () => {
+    if ($('dlgCancelar').returnValue !== 'sim' || !aCancelar) return;
+    const { p, d, h } = aCancelar;
+    try { NYLT.mudarConsulta(pac.id, p, d, h, 'cancelar'); aviso('Consulta cancelada. O horário ficou livre.'); }
+    catch (err) { aviso(err.message, true); }
+    renderizar();
+  };
+
+  /* ---------- Atendimento social ---------- */
+  function renderSocial() {
+    const d = NYLT.ler();
+    const box = $('socialPrincipal');
+    if (!pac.social) {
+      box.innerHTML = `<h2>Você está no atendimento particular</h2>
+        <p class="sub" style="margin:0 0 20px">Para entrar no atendimento social, a recepção precisa avaliar a sua situação. Ligue ou passe na clínica.</p>
+        <a class="btn ghost" href="tel:+551120914400">Ligar para (11) 2091-4400</a>`;
+      return;
+    }
+    const naFila = NYLT.posicaoNaFila(d, pac.id);
+    const sociais = NYLT.consultasDo(d, pac.id).filter(c => c.h >= PRIMEIRO_SOCIAL && c.situacao <= NYLT.CONFIRMADA);
+    if (naFila) {
+      box.innerHTML = `<div class="status-fila">
+        <div class="posicao"><div><b>${naFila.posicao}º</b><span>de ${naFila.total} na fila</span></div></div>
+        <div><h2>Você está na fila</h2>
+          <p class="sub" style="margin:0">Sua pontuação é de <b>${naFila.item.pontuacao} pontos</b>. A recepção avalia a urgência e chama pela ordem. Quando chegar a sua vez, a consulta aparece em Minhas consultas.</p></div></div>`;
+      return;
+    }
+    if (sociais.length) {
+      const c = sociais[0];
+      box.innerHTML = `<h2>Sua consulta social está marcada</h2>
+        <p class="sub" style="margin:0 0 20px">${PROFISSIONAIS[c.p]}, ${DIAS[c.d].toLowerCase()} às ${hora(c.h)}h.</p>
+        <a class="btn" href="#consultas">Ver minhas consultas</a>`;
+      return;
+    }
+    box.innerHTML = `<h2>Pedir vaga na fila</h2>
+      <p class="sub" style="margin:0 0 20px">Informe a renda por pessoa da família: some a renda de todos que moram com você e divida pelo número de pessoas.</p>
+      <form id="formSocial" novalidate>
+        <div class="field"><label for="sRenda">Renda por pessoa da família (R$)</label><input id="sRenda" type="number" inputmode="decimal" min="0" step="0.01" required></div>
+        <p class="previa" id="sPrevia" aria-live="polite">Sua pontuação inicial aparece aqui.</p>
+        <button class="btn">Pedir vaga</button>
+      </form>`;
+    $('sRenda').addEventListener('input', () => {
+      const r = parseFloat($('sRenda').value);
+      $('sPrevia').innerHTML = isNaN(r) ? 'Sua pontuação inicial aparece aqui.'
+        : `Pontuação inicial: <b>${NYLT.calcularPontuacao(r, pac.idade, 1)} pontos</b> (com urgência 1; a recepção pode aumentar).`;
+    });
+    $('formSocial').onsubmit = e => {
+      e.preventDefault();
+      const r = parseFloat($('sRenda').value);
+      if (isNaN(r)) { $('sRenda').setAttribute('aria-invalid', 'true'); return aviso('Informe a renda por pessoa da família.', true); }
+      try { const item = NYLT.pedirVagaSocial(pac.id, r); aviso(`Pedido enviado com ${item.pontuacao} pontos.`); }
+      catch (err) { aviso(err.message, true); }
+      renderSocial();
+    };
+  }
+
+  function renderizar() {
+    pac = NYLT.pacienteAtual();
+    if (!pac) return location.replace('/entrar');
+    renderAgendar(); renderConsultas(); renderSocial();
+  }
+  // quando a recepcao muda a agenda em outra aba, esta pagina se atualiza
+  addEventListener('storage', e => { if (e.key === NYLT.CHAVE || e.key === 'nylt_sessao') renderizar(); });
+  if (pac) mostrarAba();
+</script>
+</body>
+</html>

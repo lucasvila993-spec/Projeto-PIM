@@ -1,0 +1,69 @@
+/* NYLT - estilo das paginas do paciente (entrar.html e paciente.html).
+   Mesmas cores, letra e componentes do sistema da recepcao (admin.html). */
+:root {
+  --creme: #F6F5F1; --superficie: #FFFFFF; --tinta: #1B2F48; --tinta-2: #4A5D75;
+  --ouro: #B08D5B; --ouro-claro: #D6B57A; --ouro-suave: #F3EBDC; --ouro-texto: #7E6236;
+  --linha: #E5E1D7; --marinho-suave: #E8ECF1; --perigo: #A23B2C; --perigo-suave: #F8E6E2;
+  --ok: #2E6B45; --ok-suave: #E4F1E8;
+  --raio: 10px; --raio-g: 16px;
+  --m: clamp(16px, 3vw, 40px);
+}
+* { box-sizing: border-box; }
+html { font-size: 16px; color-scheme: light; }
+body { margin: 0; background: var(--superficie); color: var(--tinta); font: 1rem/1.55 Montserrat, "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--ouro); outline-offset: 2px; }
+.sr { position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+[hidden] { display: none !important; }
+
+h1 { margin: 0; font-size: clamp(30px, 3.4vw, 42px); font-weight: 300; letter-spacing: -.01em; line-height: 1.15; }
+h2 { margin: 0 0 16px; font-size: 1.2rem; font-weight: 600; }
+.sub { margin: 8px 0 0; color: var(--tinta-2); max-width: 62ch; }
+.cabeca { margin-bottom: 32px; }
+.cabeca::after { content: ""; display: block; width: 56px; height: 2px; margin-top: 16px; border-radius: 2px; background: var(--ouro); }
+
+/* ---------- Componentes ---------- */
+.card { background: var(--superficie); border: 1px solid var(--linha); border-radius: var(--raio-g); padding: 24px; }
+label { display: block; font-size: .9rem; font-weight: 600; margin: 0 0 6px; }
+.field { margin-bottom: 18px; }
+.dica { margin: 6px 0 0; font-size: .85rem; color: var(--tinta-2); }
+input { width: 100%; min-height: 46px; padding: 10px 12px; border: 1px solid var(--linha); border-radius: var(--raio); background: var(--creme); color: var(--tinta); font: inherit; }
+input:focus { border-color: var(--ouro); outline: 2px solid var(--ouro-suave); outline-offset: 0; background: var(--superficie); }
+input[aria-invalid="true"] { border-color: var(--perigo); }
+.check { display: flex; align-items: flex-start; gap: 10px; font-weight: 500; font-size: .95rem; cursor: pointer; }
+.check input { width: 20px; height: 20px; min-height: 0; margin-top: 2px; accent-color: var(--ouro); flex: none; }
+.check small { display: block; font-weight: 400; color: var(--tinta-2); font-size: .85rem; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; background: var(--tinta); color: var(--creme); border: 1px solid var(--tinta); border-radius: var(--raio); padding: 0 20px; font: inherit; font-weight: 600; text-decoration: none; cursor: pointer; transition: background .15s, transform .1s; }
+.btn:hover { background: var(--tinta-2); border-color: var(--tinta-2); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+.btn.ghost { background: transparent; color: var(--tinta); border-color: var(--linha); }
+.btn.ghost:hover { border-color: var(--ouro); background: var(--ouro-suave); }
+.btn.danger { background: transparent; color: var(--perigo); border-color: var(--linha); }
+.btn.danger:hover { border-color: var(--perigo); background: var(--perigo-suave); }
+.btn.ouro { background: var(--ouro-claro); border-color: var(--ouro-claro); color: var(--tinta); }
+.btn.ouro:hover { background: #E2C48C; }
+.btn.block { width: 100%; }
+.btn.sm { min-height: 38px; padding: 0 14px; font-size: .9rem; }
+.tag { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: .8rem; font-weight: 600; background: var(--marinho-suave); color: var(--tinta); }
+.tag.confirmada { background: var(--ok-suave); color: var(--ok); }
+.tag.compareceu { background: var(--marinho-suave); }
+.tag.faltou { background: var(--perigo-suave); color: var(--perigo); }
+.tag.social { background: var(--ouro-suave); color: var(--ouro-texto); }
+.alerta { padding: 12px 14px; border-radius: var(--raio); background: var(--perigo-suave); color: var(--perigo); font-size: .92rem; font-weight: 500; margin-bottom: 18px; }
+.alerta.ok { background: var(--ok-suave); color: var(--ok); }
+.vazio { text-align: center; padding: 48px 16px; color: var(--tinta-2); }
+.vazio p { margin: 0 0 18px; }
+
+#toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); opacity: 0; transition: .25s; background: var(--tinta); color: var(--creme); padding: 13px 20px; border-radius: 99px; font-size: .92rem; font-weight: 500; max-width: calc(100% - 32px); pointer-events: none; z-index: 40; border-left: 4px solid var(--ouro-claro); }
+#toast.show { opacity: 1; transform: translateX(-50%); }
+#toast.err { background: var(--perigo); border-left-color: #fff; }
+
+dialog { border: 1px solid var(--linha); border-top: 3px solid var(--ouro); border-radius: var(--raio-g); padding: 28px; background: var(--superficie); color: var(--tinta); width: min(420px, calc(100% - 32px)); box-shadow: 0 24px 60px rgba(27,47,72,.28); }
+dialog::backdrop { background: rgba(27,47,72,.45); }
+dialog h2 { font-size: 1.3rem; margin-bottom: 6px; }
+dialog p { margin: 0; color: var(--tinta-2); }
+.acoes { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; margin-top: 22px; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

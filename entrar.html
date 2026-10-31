@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entrar · Clínica NYLT</title>
+<meta name="description" content="Entre ou crie seu cadastro na Clínica NYLT para marcar consultas de psicologia, nutrição e fisioterapia no Tatuapé.">
+<meta name="theme-color" content="#1B2F48">
+<link rel="icon" href="assets/logo-marca-transparente.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Tela de acesso da NYLT: mesma marca da landing (azul-marinho, dourado, creme; Montserrat).
+     Grade: conteiner de 1104px = formulario 560 + vao 64 + painel 480. */
+  :root {
+    --branco: #FFFFFF; --creme: #F6F5F1; --creme-2: #EFEDE6;
+    --tinta: #1B2F48; --tinta-2: #4A5D75; --azul-2: #2A4465;
+    --ouro: #B08D5B; --ouro-claro: #D6B57A; --ouro-suave: #F3EBDC; --ouro-texto: #7A5E33;
+    --borda: #E3DFD5; --controle: #CFC9BC;
+    --perigo: #A23B2C; --perigo-suave: #FBEAE6; --ok: #247B50;
+    --m: clamp(16px, 4vw, 48px);
+    --sai: cubic-bezier(.16, 1, .3, 1);
+  }
+  * { box-sizing: border-box; }
+  html { color-scheme: light; }
+  body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; background: var(--creme); color: var(--tinta); font: 400 16px/1.55 Montserrat, "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  img, svg { display: block; max-width: 100%; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--ouro); outline-offset: 2px; }
+  [hidden] { display: none !important; }
+  .sr { position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* ---------- Barra do topo (igual a da landing) ---------- */
+  .topo { background: var(--tinta); color: var(--branco); }
+  .topo-linha { max-width: 1200px; margin: 0 auto; padding: 0 var(--m); min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .marca { display: flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 700; font-size: 20px; letter-spacing: .06em; }
+  .marca .selo { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: var(--creme); }
+  .marca img { width: 34px; height: auto; }
+  .voltar { color: #D5DCE6; text-decoration: none; font-weight: 500; font-size: 15px; padding: 8px 0; }
+  .voltar:hover { color: var(--branco); text-decoration: underline; text-underline-offset: 4px; }
+  .topo :focus-visible { outline-color: var(--ouro-claro); }
+
+  /* ---------- Area principal ---------- */
+  main { flex: 1; width: 100%; max-width: 1200px; margin: 0 auto; padding: clamp(28px, 5vw, 64px) var(--m) 64px; display: grid; grid-template-columns: minmax(0, 560px) minmax(0, 480px); justify-content: space-between; gap: 40px 64px; align-items: start; }
+
+  /* Formulario: cartao branco */
+  .cartao { background: var(--branco); border: 1px solid var(--borda); border-top: 4px solid var(--ouro); border-radius: 20px; padding: clamp(24px, 3.4vw, 40px); }
+  h1 { margin: 0; font-size: 28px; font-weight: 700; line-height: 1.2; letter-spacing: -.01em; }
+  .sub { margin: 8px 0 0; color: var(--tinta-2); font-size: 15px; }
+  .sub::after { content: ""; display: block; width: 48px; height: 3px; margin-top: 16px; border-radius: 3px; background: var(--ouro); }
+  .alternar { display: inline-grid; grid-template-columns: auto auto; gap: 4px; margin: 24px 0 28px; padding: 4px; border-radius: 99px; background: var(--creme); }
+  .alternar button { min-height: 40px; padding: 0 20px; border: 0; border-radius: 99px; background: none; color: var(--tinta-2); font: 500 15px Montserrat, sans-serif; cursor: pointer; transition: background .2s, color .2s; }
+  .alternar button:hover { color: var(--tinta); }
+  .alternar button[aria-selected="true"] { background: var(--tinta); color: var(--branco); font-weight: 600; }
+  .alternar button[aria-selected="true"]::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 8px; border-radius: 50%; background: var(--ouro-claro); vertical-align: 2px; }
+
+  .campo { margin-bottom: 18px; }
+  label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; }
+  .entrada { position: relative; }
+  input { width: 100%; min-height: 48px; padding: 10px 14px; border: 1px solid var(--controle); border-radius: 12px; background: var(--branco); color: var(--tinta); font: inherit; transition: border-color .15s; }
+  input::placeholder { color: #6E7785; }
+  input:hover { border-color: var(--tinta-2); }
+  input:focus { outline: 3px solid var(--ouro-suave); outline-offset: 0; border-color: var(--ouro); }
+  input[aria-invalid="true"] { border-color: var(--perigo); outline: 3px solid var(--perigo-suave); outline-offset: 0; }
+  .entrada input[type="password"], .entrada input.com-botao { padding-right: 92px; }
+  .mostrar { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); min-height: 36px; padding: 0 12px; border: 0; border-radius: 8px; background: none; color: var(--ouro-texto); font: 600 14px Montserrat, sans-serif; cursor: pointer; }
+  .mostrar:hover { background: var(--ouro-suave); }
+  .dica { margin: 6px 0 0; font-size: 13px; color: var(--tinta-2); }
+  .dica.erro { color: var(--perigo); font-weight: 500; }
+  .linha2 { display: grid; grid-template-columns: minmax(0, 1fr) 120px; gap: 16px; }
+
+  .opcao-social { display: flex; gap: 14px; align-items: flex-start; padding: 14px; border: 2px solid var(--ouro-suave); border-radius: 14px; background: var(--creme); cursor: pointer; margin: 6px 0 24px; font-weight: 500; transition: background .2s, border-color .2s; }
+  .opcao-social:hover { background: var(--ouro-suave); }
+  .opcao-social:has(input:checked) { background: var(--ouro-suave); border-color: var(--ouro); }
+  .opcao-social input { flex: none; width: 22px; height: 22px; min-height: 0; margin: 1px 0 0; accent-color: var(--ouro); }
+  .opcao-social strong { display: block; font-size: 15px; font-weight: 600; }
+  .opcao-social span span { display: block; margin-top: 2px; font-size: 14px; font-weight: 400; color: var(--tinta-2); }
+
+  .botao { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 52px; border: 0; border-radius: 99px; background: var(--tinta); color: var(--branco); font: 600 16px Montserrat, sans-serif; text-decoration: none; cursor: pointer; transition: background .2s, transform .1s; }
+  .botao:hover { background: var(--azul-2); }
+  .botao:active { transform: scale(.98); }
+  .botao[aria-busy="true"] { opacity: .7; cursor: progress; }
+  .troca { margin: 20px 0 0; text-align: center; font-size: 15px; color: var(--tinta-2); }
+  .troca button { border: 0; background: none; padding: 4px 2px; font: 600 15px Montserrat, sans-serif; color: var(--tinta); text-decoration: underline; text-decoration-color: var(--ouro); text-decoration-thickness: 2px; text-underline-offset: 4px; cursor: pointer; }
+  .troca button:hover { color: var(--ouro-texto); }
+  .alerta { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 20px; padding: 12px 14px; border-radius: 12px; background: var(--perigo-suave); color: var(--perigo); font-size: 15px; font-weight: 500; }
+  .ja-entrou { text-align: center; }
+  .ja-entrou p { margin: 16px 0 24px; }
+
+  /* ---------- Painel: a semana da clinica, com os horarios livres reais ---------- */
+  .painel { background: var(--tinta); color: var(--creme); border-radius: 24px; padding: 32px; }
+  .painel h2 { margin: 0; font-size: 22px; font-weight: 700; line-height: 1.25; color: var(--branco); }
+  .painel > p { margin: 8px 0 0; color: #D5DCE6; font-size: 15px; }
+  .coracao { width: 100%; max-width: 300px; margin: 20px auto 8px; }
+  .legenda { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 16px; font-size: 13px; color: #D5DCE6; }
+  .legenda li { display: flex; align-items: center; gap: 6px; }
+  .legenda i { width: 12px; height: 12px; border-radius: 3px; }
+  .legenda, .livres { list-style: none; margin: 0; padding: 0; }
+  .livres { margin-top: 24px; background: var(--azul-2); border-radius: 16px; padding: 4px 18px; }
+  .livres li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 12px 0; font-size: 15px; }
+  .livres li + li { border-top: 1px solid #3A5578; }
+  .livres b { color: var(--ouro-claro); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ajuda { margin-top: 24px; padding: 16px 20px; border-radius: 14px; background: var(--creme); font-size: 15px; }
+  .ajuda a { font-weight: 600; white-space: nowrap; }
+  .garantias { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 8px; color: var(--tinta-2); }
+  .garantias li { display: flex; gap: 10px; }
+  .garantias svg { flex: none; width: 20px; height: 20px; margin-top: 2px; stroke: var(--ouro); fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+
+  .rodape { padding: 0 var(--m) 28px; max-width: 1200px; margin: 0 auto; width: 100%; font-size: 13px; color: var(--tinta-2); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  /* ---------- Tablet e celular: o formulario primeiro, o painel embaixo ---------- */
+  @media (max-width: 960px) {
+    main { grid-template-columns: minmax(0, 1fr); max-width: 640px; }
+  }
+  @media (max-width: 560px) {
+    .topo-linha { min-height: 64px; }
+    .marca .selo { width: 40px; height: 40px; }
+    .marca img { width: 30px; }
+    .cartao { border-radius: 16px; }
+    h1 { font-size: 24px; }
+    .alternar { display: grid; width: 100%; grid-template-columns: 1fr 1fr; }
+    .linha2 { grid-template-columns: minmax(0, 1fr) 100px; gap: 12px; }
+    .painel { padding: 24px 20px; border-radius: 18px; }
+  }
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="topo-linha">
+    <a class="marca" href="/home"><span class="selo"><img src="assets/logo-marca-transparente.webp" alt="" width="200" height="141"></span>NYLT<span class="sr">, ir para o site</span></a>
+    <a class="voltar" href="/home">Voltar para o site</a>
+  </div>
+</header>
+
+<main>
+  <!-- ===== Formulario de acesso ===== -->
+  <section class="cartao" aria-labelledby="titulo">
+    <h1 id="titulo">Entrar na NYLT</h1>
+    <p class="sub" id="subtitulo">Use o telefone e a senha do seu cadastro.</p>
+
+    <div class="ja-entrou" id="jaEntrou" hidden>
+      <p id="jaEntrouTexto"></p>
+      <a class="botao" href="/paciente">Ir para minha área</a>
+      <p class="troca"><button type="button" id="btnTrocar">Entrar com outra conta</button></p>
+    </div>
+
+    <div id="area">
+      <div class="alternar" role="tablist" aria-label="Acesso">
+        <button role="tab" id="aba-entrar" aria-controls="formEntrar" aria-selected="true">Entrar</button>
+        <button role="tab" id="aba-cadastro" aria-controls="formCadastro" aria-selected="false" tabindex="-1">Criar cadastro</button>
+      </div>
+      <div class="alerta" id="erro" role="alert" hidden></div>
+
+      <form id="formEntrar" role="tabpanel" aria-labelledby="aba-entrar" novalidate>
+        <div class="campo"><label for="eTel">Telefone</label><input id="eTel" type="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 98765-4321" required></div>
+        <div class="campo"><label for="eSenha">Senha</label>
+          <div class="entrada"><input id="eSenha" type="password" autocomplete="current-password" required><button type="button" class="mostrar" data-alvo="eSenha" aria-controls="eSenha" aria-pressed="false">Mostrar</button></div>
+        </div>
+        <button class="botao" id="btnEntrar">Entrar</button>
+        <p class="troca">Primeira vez na NYLT? <button type="button" data-ir="cadastro">Criar cadastro</button></p>
+        <div class="ajuda">
+          <p><strong>Esqueceu a senha?</strong> A recepção ajuda pelo <a href="tel:+551120914400">(11) 2091-4400</a>, de segunda a sexta, das 10h às 17h.</p>
+        </div>
+      </form>
+
+      <form id="formCadastro" role="tabpanel" aria-labelledby="aba-cadastro" novalidate hidden>
+        <div class="campo"><label for="cNome">Nome completo</label><input id="cNome" autocomplete="name" maxlength="59" required></div>
+        <div class="linha2">
+          <div class="campo"><label for="cTel">Telefone</label><input id="cTel" type="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 98765-4321" required aria-describedby="cTelDica"></div>
+          <div class="campo"><label for="cIdade">Idade</label><input id="cIdade" type="number" inputmode="numeric" min="0" max="130" required></div>
+        </div>
+        <p class="dica" id="cTelDica" style="margin:-8px 0 18px">Já foi atendido pela recepção? Use o mesmo telefone e o seu cadastro é aproveitado.</p>
+        <div class="campo"><label for="cSenha">Crie uma senha</label>
+          <div class="entrada"><input id="cSenha" type="password" autocomplete="new-password" minlength="6" required aria-describedby="cSenhaDica"><button type="button" class="mostrar" data-alvo="cSenha" aria-controls="cSenha" aria-pressed="false">Mostrar</button></div>
+          <p class="dica" id="cSenhaDica">Pelo menos 6 caracteres.</p>
+        </div>
+        <label class="opcao-social" for="cSocial"><input type="checkbox" id="cSocial"><span><strong>Quero o atendimento social</strong><span>Para famílias de baixa renda: consultas às 16h e 17h, a valor simbólico, pela fila de prioridade.</span></span></label>
+        <button class="botao" id="btnCriar">Criar cadastro</button>
+        <p class="troca">Já tem cadastro? <button type="button" data-ir="entrar">Entrar</button></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== Painel: o que espera a pessoa depois de entrar ===== -->
+  <aside class="painel" aria-labelledby="painelTitulo">
+    <h2 id="painelTitulo">A semana da NYLT agora</h2>
+    <p>Horários livres lidos da agenda da clínica. Entre e marque o seu.</p>
+    <svg class="coracao" viewBox="0 0 520 470" aria-hidden="true">
+      <defs><clipPath id="corte"><path d="M260 452C140 372 24 290 24 168 24 96 82 40 152 40c46 0 84 24 108 60 24-36 62-60 108-60 70 0 128 56 128 128 0 122-116 204-236 284z"/></clipPath></defs>
+      <g id="grade" clip-path="url(#corte)"></g>
+      <path d="M260 452C140 372 24 290 24 168 24 96 82 40 152 40c46 0 84 24 108 60 24-36 62-60 108-60 70 0 128 56 128 128 0 122-116 204-236 284z" fill="none" stroke="#D6B57A" stroke-width="7"/>
+    </svg>
+    <ul class="legenda" aria-hidden="true">
+      <li><i style="background:#C7D3E2"></i>Livre</li>
+      <li><i style="background:#7F95B4"></i>Poucas vagas</li>
+      <li><i style="background:#0F1E31; box-shadow: 0 0 0 1px #5D7699"></i>Lotado</li>
+      <li><i style="background:#E8D3AA"></i>Social</li>
+    </ul>
+    <ul class="livres" aria-label="Próximo horário livre de cada especialidade">
+      <li><span>Psicologia</span><b data-prox="0">segunda, 10h</b></li>
+      <li><span>Nutrição</span><b data-prox="1">segunda, 10h</b></li>
+      <li><span>Fisioterapia</span><b data-prox="2">segunda, 10h</b></li>
+    </ul>
+  </aside>
+</main>
+
+<p class="rodape">Clínica Saúde NYLT, Tatuapé, São Paulo. Projeto PIM II, ADS, UNIP.</p>
+
+<script src="assets/nylt-dados.js"></script>
+<script>
+  const $ = id => document.getElementById(id);
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const destino = () => $('cSocial').checked ? '/paciente#social' : '/paciente';
+
+  /* ---------- Painel: coracao da semana e proximos horarios livres ---------- */
+  function desenharPainel() {
+    const d = NYLT.ler();
+    const grade = $('grade');
+    grade.innerHTML = '';
+    const x0 = 62, y0 = 66, larg = 74, alt = 40, gap = 6;
+    for (let h = 0; h < NYLT.HORARIOS; h++) {
+      for (let dia = 0; dia < NYLT.DIAS.length; dia++) {
+        // lotado (nenhum profissional livre), poucas vagas (1 ou 2), livre (os 3)
+        const livres = NYLT.PROFISSIONAIS.filter((_, p) => !d.agenda[p][dia][h]).length;
+        const social = h >= NYLT.PRIMEIRO_SOCIAL;
+        const tons = social ? ['#9C7A48', '#C9A266', '#C9A266', '#E8D3AA'] : ['#0F1E31', '#7F95B4', '#7F95B4', '#C7D3E2'];
+        const r = document.createElementNS(svgNS, 'rect');
+        r.setAttribute('x', x0 + dia * (larg + gap)); r.setAttribute('y', y0 + h * (alt + gap));
+        r.setAttribute('width', larg); r.setAttribute('height', alt); r.setAttribute('rx', 8);
+        r.setAttribute('fill', tons[livres]);
+        grade.appendChild(r);
+      }
+    }
+    NYLT.PROFISSIONAIS.forEach((_, p) => {
+      const s = NYLT.proximoLivre(d, p);
+      document.querySelector(`[data-prox="${p}"]`).textContent = s ? `${NYLT.DIAS[s.d].toLowerCase()}, ${NYLT.hora(s.h)}h` : 'semana cheia';
+    });
+  }
+  desenharPainel();
+  addEventListener('storage', e => { if (e.key === NYLT.CHAVE) desenharPainel(); });
+
+  /* ---------- Telefone no formato (11) 98765-4321 enquanto digita ---------- */
+  function mascara(e) {
+    const d = NYLT.soDigitos(e.target.value).slice(0, 11);
+    let t = d;
+    if (d.length > 2) t = `(${d.slice(0, 2)}) ${d.slice(2)}`;
+    if (d.length > 7) t = `(${d.slice(0, 2)}) ${d.slice(2, d.length - 4)}-${d.slice(-4)}`;
+    e.target.value = t;
+  }
+  ['eTel', 'cTel'].forEach(id => $(id).addEventListener('input', mascara));
+
+  /* ---------- Mostrar ou esconder a senha ---------- */
+  document.querySelectorAll('.mostrar').forEach(b => b.addEventListener('click', () => {
+    const campo = $(b.dataset.alvo), ver = campo.type === 'password';
+    campo.type = ver ? 'text' : 'password';
+    b.textContent = ver ? 'Esconder' : 'Mostrar';
+    b.setAttribute('aria-pressed', ver);
+    campo.focus();
+  }));
+
+  /* ---------- Erros: mensagem no topo e campo marcado ---------- */
+  function mostrarErro(msg, campo) {
+    $('erro').textContent = msg; $('erro').hidden = !msg;
+    document.querySelectorAll('input[aria-invalid]').forEach(i => i.removeAttribute('aria-invalid'));
+    if (campo) { $(campo).setAttribute('aria-invalid', 'true'); $(campo).focus(); }
+  }
+  document.querySelectorAll('input').forEach(i => i.addEventListener('input', () => i.removeAttribute('aria-invalid')));
+  // descobre qual campo a mensagem do sistema se refere
+  function campoDoErro(msg, form) {
+    if (form === 'entrar') return /telefone/i.test(msg) && !/senha/i.test(msg) ? 'eTel' : 'eSenha';
+    if (/nome/i.test(msg)) return 'cNome';
+    if (/telefone/i.test(msg)) return 'cTel';
+    if (/idade/i.test(msg)) return 'cIdade';
+    if (/senha/i.test(msg)) return 'cSenha';
+    return null;
+  }
+
+  /* ---------- Alternar entre Entrar e Criar cadastro ---------- */
+  function abrirAba(qual) {
+    const cad = qual === 'cadastro';
+    $('aba-entrar').setAttribute('aria-selected', !cad); $('aba-entrar').tabIndex = cad ? -1 : 0;
+    $('aba-cadastro').setAttribute('aria-selected', cad); $('aba-cadastro').tabIndex = cad ? 0 : -1;
+    $('formEntrar').hidden = cad; $('formCadastro').hidden = !cad;
+    $('titulo').textContent = cad ? 'Criar cadastro' : 'Entrar na NYLT';
+    $('subtitulo').textContent = cad ? 'Leva dois minutos. Depois é só escolher o horário.' : 'Use o telefone e a senha do seu cadastro.';
+    document.title = (cad ? 'Criar cadastro' : 'Entrar') + ' · Clínica NYLT';
+    mostrarErro('');
+  }
+  $('aba-entrar').onclick = () => abrirAba('entrar');
+  $('aba-cadastro').onclick = () => abrirAba('cadastro');
+  document.querySelectorAll('[data-ir]').forEach(b => b.onclick = () => { abrirAba(b.dataset.ir); (b.dataset.ir === 'cadastro' ? $('cNome') : $('eTel')).focus(); });
+  document.querySelector('.alternar').onkeydown = e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      const cad = $('aba-entrar').getAttribute('aria-selected') === 'true';
+      abrirAba(cad ? 'cadastro' : 'entrar');
+      (cad ? $('aba-cadastro') : $('aba-entrar')).focus();
+    }
+  };
+
+  // links da landing: #cadastro e #cadastro-social
+  const hash = location.hash.slice(1);
+  if (hash.startsWith('cadastro')) abrirAba('cadastro');
+  if (hash === 'cadastro-social') $('cSocial').checked = true;
+
+  // quem ja entrou ve o atalho para a sua area
+  const atual = NYLT.pacienteAtual();
+  if (atual) {
+    $('area').hidden = true; $('jaEntrou').hidden = false;
+    $('titulo').textContent = 'Você já entrou';
+    $('subtitulo').textContent = 'Siga para a sua área ou troque de conta.';
+    $('jaEntrouTexto').textContent = `Conectado como ${atual.nome}.`;
+  }
+  $('btnTrocar').onclick = () => { NYLT.sair(); $('area').hidden = false; $('jaEntrou').hidden = true; abrirAba('entrar'); };
+
+  function ocupado(botao, sim) { botao.setAttribute('aria-busy', sim); botao.disabled = sim; }
+
+  $('formEntrar').onsubmit = async e => {
+    e.preventDefault();
+    if (!$('eTel').value) return mostrarErro('Informe o seu telefone.', 'eTel');
+    if (!$('eSenha').value) return mostrarErro('Informe a sua senha.', 'eSenha');
+    ocupado($('btnEntrar'), true);
+    try { await NYLT.entrar($('eTel').value, $('eSenha').value); location.href = '/paciente'; }
+    catch (err) { mostrarErro(err.message, campoDoErro(err.message, 'entrar')); $('eSenha').value = ''; }
+    finally { ocupado($('btnEntrar'), false); }
+  };
+
+  $('formCadastro').onsubmit = async e => {
+    e.preventDefault();
+    ocupado($('btnCriar'), true);
+    try {
+      await NYLT.cadastrar({
+        nome: $('cNome').value, telefone: $('cTel').value,
+        idade: $('cIdade').value === '' ? NaN : +$('cIdade').value,
+        social: $('cSocial').checked, senha: $('cSenha').value
+      });
+      location.href = destino();
+    } catch (err) { mostrarErro(err.message, campoDoErro(err.message, 'cadastro')); }
+    finally { ocupado($('btnCriar'), false); }
+  };
+</script>
+</body>
+</html>
