@@ -7,6 +7,6 @@
     { "source": "/nylt_agenda", "destination": "/admin", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/home", "destination": "/index.html" }
+    { "source": "/home", "destination": "/index" }
   ]
 }

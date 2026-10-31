@@ -1,0 +1,8 @@
+.web
+_site
+.taste-skill
+.claude
+scripts
+nylt_agenda.c
+*.txt
+*.exe

@@ -14,3 +14,6 @@ fila.txt
 .claude/
 _site/
 node_modules/
+
+.vercel
+.env*
