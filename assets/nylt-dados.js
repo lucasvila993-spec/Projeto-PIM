@@ -1,15 +1,18 @@
 /*
  * NYLT - dados compartilhados entre o site dos pacientes e a recepcao (admin.html).
- * Usa as mesmas estruturas do nylt_agenda.c e grava no mesmo lugar que o admin
- * (localStorage, chave nylt_agenda_v1). As contas de acesso dos pacientes ficam
- * separadas (nylt_contas_v1) para nao mudar o formato dos arquivos .txt.
+ * Os dados ficam no banco do Supabase (projeto nylt-agenda), nas tabelas pacientes, consultas,
+ * fila_social, historico e contas, com as mesmas estruturas do nylt_agenda.c.
+ * O site nao le as tabelas direto: chama as funcoes do banco (RPC), que conferem a sessao.
+ * Para nao reescrever as paginas, este modulo guarda uma copia dos dados no mesmo formato de
+ * antes ({pacientes, fila, agenda, presenca, historico}); ler() devolve essa copia e
+ * carregar() busca de novo no banco.
  */
 const NYLT = (() => {
-  const CHAVE = 'nylt_agenda_v1';
-  const CHAVE_CONTAS = 'nylt_contas_v1';
+  // endereco do projeto e chave publica (feita para ficar no navegador; o acesso e controlado pelas funcoes)
+  const SUPABASE_URL = 'https://hfeppfkzegclsnxfsczv.supabase.co';
+  const SUPABASE_CHAVE = 'sb_publishable_JXosdkJL2xkzSpnpGpce6g_j85yYLBf';
   const CHAVE_SESSAO = 'nylt_sessao';
 
-  const MAX_PACIENTES = 100, MAX_FILA = 50;
   const PROFISSIONAIS = ['Psicologia', 'Nutrição', 'Fisioterapia'];
   const DIAS = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'];
   const HORARIOS = 8;          // 10h as 17h
@@ -20,22 +23,54 @@ const NYLT = (() => {
   const hora = h => 10 + h;
   const soDigitos = t => String(t || '').replace(/\D/g, '');
   const novaAgenda = () => PROFISSIONAIS.map(() => DIAS.map(() => Array(HORARIOS).fill(0)));
+  const vazio = () => ({ pacientes: [], fila: [], agenda: novaAgenda(), presenca: novaAgenda(), historico: [] });
 
-  function lerJSON(chave, padrao) {
-    try { return JSON.parse(localStorage.getItem(chave)) || padrao; } catch (e) { return padrao; }
-  }
-  function gravarJSON(chave, valor) {
-    try { localStorage.setItem(chave, JSON.stringify(valor)); return true; } catch (e) { return false; }
+  let dados = vazio();     // copia local do que veio do banco
+  let paciente = null;     // paciente logado (ou null)
+
+  /* ---------- Chamada a uma funcao do banco ---------- */
+  async function rpc(nome, parametros = {}) {
+    let resposta;
+    try {
+      resposta = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${nome}`, {
+        method: 'POST',
+        headers: { apikey: SUPABASE_CHAVE, 'Content-Type': 'application/json' },
+        body: JSON.stringify(parametros)
+      });
+    } catch (e) {
+      throw new Error('Sem conexão com o servidor. Confira a internet e tente de novo.');
+    }
+    const texto = await resposta.text();
+    let corpo = null;
+    try { corpo = texto ? JSON.parse(texto) : null; } catch (e) {}
+    if (!resposta.ok) throw new Error((corpo && corpo.message) || 'Não foi possível concluir. Tente de novo.');
+    return corpo;
   }
 
-  function ler() {
-    const d = lerJSON(CHAVE, {});
-    return {
-      pacientes: d.pacientes || [], fila: d.fila || [], agenda: d.agenda || novaAgenda(),
-      presenca: d.presenca || novaAgenda(), historico: d.historico || []
-    };
+  const token = () => { try { return (JSON.parse(localStorage.getItem(CHAVE_SESSAO)) || {}).token || null; } catch (e) { return null; } };
+  const guardarToken = t => { try { localStorage.setItem(CHAVE_SESSAO, JSON.stringify({ token: t })); } catch (e) {} };
+  const esquecerToken = () => { try { localStorage.removeItem(CHAVE_SESSAO); } catch (e) {} };
+
+  // busca os dados no banco: os do paciente logado, ou so a ocupacao da semana para quem nao entrou
+  async function carregar() {
+    const t = token();
+    if (t) {
+      const r = await rpc('paciente_estado', { p_token: t });
+      if (r) { dados = r.estado; paciente = r.paciente; return dados; }
+      esquecerToken();   // a sessao acabou ou o cadastro foi excluido
+    }
+    paciente = null;
+    dados = await rpc('estado_publico');
+    return dados;
   }
-  const gravar = d => gravarJSON(CHAVE, d);
+  const ler = () => dados;
+
+  // atualiza a pagina quando a agenda muda em outro lugar (outro paciente ou a recepcao)
+  function aoMudar(callback, segundos = 20) {
+    const atualizar = () => carregar().then(callback).catch(() => {});
+    setInterval(() => { if (!document.hidden) atualizar(); }, segundos * 1000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) atualizar(); });
+  }
 
   /* ---------- Regras (iguais ao programa em C) ---------- */
   function calcularPontuacao(renda, idade, urgencia) {
@@ -47,82 +82,34 @@ const NYLT = (() => {
     else if (idade < 12) pontos += 15;
     return pontos + urgencia * 10;
   }
-  // bubble sort: maior pontuacao primeiro, empate mantem a ordem de chegada
-  function ordenarFila(fila) {
-    for (let i = 0; i < fila.length - 1; i++)
-      for (let j = 0; j < fila.length - 1 - i; j++)
-        if (fila[j].pontuacao < fila[j + 1].pontuacao) [fila[j], fila[j + 1]] = [fila[j + 1], fila[j]];
-  }
 
   /* ---------- Contas e sessao ---------- */
-  async function hashSenha(senha) {
-    const texto = 'nylt:' + senha;
-    if (window.crypto && crypto.subtle) {
-      try {
-        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(texto));
-        return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
-      } catch (e) {}
-    }
-    let h = 5381;
-    for (const c of texto) h = ((h << 5) + h + c.charCodeAt(0)) >>> 0;
-    return 'djb2-' + h.toString(16);
-  }
-
   async function cadastrar({ nome, telefone, idade, social, senha }) {
-    const tel = soDigitos(telefone);
-    if (tel.length < 10) throw new Error('Informe o telefone com DDD, por exemplo (11) 98765-4321.');
+    // as mesmas conferencias sao feitas no banco; aqui so para responder na hora
+    if (soDigitos(telefone).length < 10) throw new Error('Informe o telefone com DDD, por exemplo (11) 98765-4321.');
     if (!nome.trim()) throw new Error('Informe o seu nome completo.');
     if (!(idade >= 0 && idade <= 130)) throw new Error('Informe uma idade válida.');
     if (senha.length < 6) throw new Error('A senha precisa ter pelo menos 6 caracteres.');
-    const contas = lerJSON(CHAVE_CONTAS, {});
-    const d = ler();
-    if (contas[tel] && d.pacientes.some(p => p.id === contas[tel].id && soDigitos(p.telefone) === tel))
-      throw new Error('Já existe uma conta com esse telefone. Use "Entrar".');
-
-    // se a recepcao ja cadastrou esse telefone, a conta passa a usar esse cadastro
-    let pac = d.pacientes.find(p => soDigitos(p.telefone) === tel);
-    const vinculado = !!pac;
-    if (!pac) {
-      if (d.pacientes.length >= MAX_PACIENTES) throw new Error('O limite de pacientes foi atingido. Fale com a recepção.');
-      pac = {
-        id: d.pacientes.length ? d.pacientes[d.pacientes.length - 1].id + 1 : 1,
-        nome: nome.trim().replace(/;/g, ','), telefone: telefone.trim().replace(/;/g, ','),
-        idade: +idade, social: social ? 1 : 0
-      };
-      d.pacientes.push(pac);
-      gravar(d);
-    }
-    contas[tel] = { id: pac.id, hash: await hashSenha(senha) };
-    gravarJSON(CHAVE_CONTAS, contas);
-    gravarJSON(CHAVE_SESSAO, { id: pac.id, tel });
-    return { paciente: pac, vinculado };
+    const r = await rpc('paciente_cadastrar', { p_nome: nome, p_telefone: telefone, p_idade: idade, p_social: !!social, p_senha: senha });
+    guardarToken(r.token);
+    paciente = r.paciente;
+    return { paciente: r.paciente, vinculado: r.vinculado };
   }
 
   async function entrar(telefone, senha) {
-    const tel = soDigitos(telefone);
-    const contas = lerJSON(CHAVE_CONTAS, {});
-    const conta = contas[tel];
-    const erro = new Error('Telefone ou senha incorretos.');
-    if (!conta) throw erro;
-    const pac = ler().pacientes.find(p => p.id === conta.id && soDigitos(p.telefone) === tel);
-    if (!pac) {  // o cadastro foi excluido pela recepcao
-      delete contas[tel];
-      gravarJSON(CHAVE_CONTAS, contas);
-      throw new Error('Não encontramos o seu cadastro. Faça um novo cadastro.');
-    }
-    if (conta.hash !== await hashSenha(senha)) throw erro;
-    gravarJSON(CHAVE_SESSAO, { id: pac.id, tel });
-    return pac;
+    const r = await rpc('paciente_entrar', { p_telefone: telefone, p_senha: senha });
+    guardarToken(r.token);
+    paciente = r.paciente;
+    return r.paciente;
   }
 
-  function pacienteAtual() {
-    const s = lerJSON(CHAVE_SESSAO, null);
-    if (!s) return null;
-    const pac = ler().pacientes.find(p => p.id === s.id && soDigitos(p.telefone) === s.tel);
-    if (!pac) sair();
-    return pac || null;
+  const pacienteAtual = () => paciente;
+  function sair() {
+    const t = token();
+    esquecerToken();
+    paciente = null;
+    if (t) rpc('paciente_sair', { p_token: t }).catch(() => {});
   }
-  function sair() { try { localStorage.removeItem(CHAVE_SESSAO); } catch (e) {} }
 
   /* ---------- Agenda ---------- */
   // horarios que o proprio paciente pode marcar: 10h as 15h (16h e 17h passam pela fila social)
@@ -143,24 +130,13 @@ const NYLT = (() => {
     return lista.sort((a, b) => a.d - b.d || a.h - b.h || a.p - b.p);
   }
 
-  function agendar(id, p, dia, h) {
-    const d = ler();
-    const pac = d.pacientes.find(x => x.id === id);
-    if (!pac) throw new Error('Não encontramos o seu cadastro.');
-    if (h >= PRIMEIRO_SOCIAL) throw new Error('As 16h e 17h são do atendimento social e são marcadas pela fila.');
-    if (d.agenda[p][dia][h]) throw new Error('Esse horário acabou de ser ocupado. Escolha outro.');
-    if (consultasDo(d, id).some(c => c.d === dia && c.h === h))
-      throw new Error(`Você já tem uma consulta ${DIAS[dia].toLowerCase()} às ${hora(h)}h.`);
-    d.agenda[p][dia][h] = id;
-    d.presenca[p][dia][h] = AGENDADA;
-    gravar(d);
+  async function agendar(id, p, dia, h) {
+    try { await rpc('paciente_agendar', { p_token: token(), p_prof: p, p_dia: dia, p_horario: h }); }
+    finally { await carregar().catch(() => {}); }
   }
-  function mudarConsulta(id, p, dia, h, acao) {
-    const d = ler();
-    if (d.agenda[p][dia][h] !== id) throw new Error('Essa consulta não está mais na agenda.');
-    if (acao === 'cancelar') { d.agenda[p][dia][h] = 0; d.presenca[p][dia][h] = 0; }
-    else if (acao === 'confirmar') d.presenca[p][dia][h] = CONFIRMADA;
-    gravar(d);
+  async function mudarConsulta(id, p, dia, h, acao) {
+    try { await rpc('paciente_mudar_consulta', { p_token: token(), p_prof: p, p_dia: dia, p_horario: h, p_acao: acao }); }
+    finally { await carregar().catch(() => {}); }
   }
 
   /* ---------- Fila do atendimento social ---------- */
@@ -168,27 +144,15 @@ const NYLT = (() => {
     const i = d.fila.findIndex(f => f.idPaciente === id);
     return i < 0 ? null : { posicao: i + 1, total: d.fila.length, item: d.fila[i] };
   }
-  function pedirVagaSocial(id, renda) {
-    const d = ler();
-    const pac = d.pacientes.find(x => x.id === id);
-    if (!pac || !pac.social) throw new Error('A fila é exclusiva para pacientes do atendimento social.');
-    if (d.fila.some(f => f.idPaciente === id)) throw new Error('Você já está na fila.');
-    if (d.fila.length >= MAX_FILA) throw new Error('A fila está cheia no momento. Fale com a recepção.');
+  async function pedirVagaSocial(id, renda) {
     if (!(renda >= 0)) throw new Error('Informe a renda por pessoa da família.');
-    // a urgencia comeca baixa (1) e e avaliada pela recepcao, que pode revisar a pontuacao
-    const item = { idPaciente: id, rendaPerCapita: Math.round(renda * 100) / 100, urgencia: 1 };
-    item.pontuacao = calcularPontuacao(item.rendaPerCapita, pac.idade, 1);
-    d.fila.push(item);
-    ordenarFila(d.fila);
-    d.historico.unshift({ quando: new Date().toLocaleString('pt-BR'),
-      texto: `Paciente código ${id} pediu vaga pelo site com ${item.pontuacao} pts (urgência a avaliar pela recepção).` });
-    gravar(d);
-    return item;
+    try { return await rpc('paciente_pedir_social', { p_token: token(), p_renda: renda }); }
+    finally { await carregar().catch(() => {}); }
   }
 
   return {
-    CHAVE, PROFISSIONAIS, DIAS, HORARIOS, PRIMEIRO_SOCIAL, SITUACOES, AGENDADA, CONFIRMADA, COMPARECEU, FALTOU,
-    hora, soDigitos, ler, calcularPontuacao, cadastrar, entrar, pacienteAtual, sair,
+    SUPABASE_URL, SUPABASE_CHAVE, PROFISSIONAIS, DIAS, HORARIOS, PRIMEIRO_SOCIAL, SITUACOES, AGENDADA, CONFIRMADA, COMPARECEU, FALTOU,
+    rpc, hora, soDigitos, carregar, ler, aoMudar, calcularPontuacao, cadastrar, entrar, pacienteAtual, sair,
     livres, proximoLivre, consultasDo, agendar, mudarConsulta, posicaoNaFila, pedirVagaSocial
   };
 })();

@@ -240,7 +240,7 @@
     });
   }
   desenharPainel();
-  addEventListener('storage', e => { if (e.key === NYLT.CHAVE) desenharPainel(); });
+  NYLT.aoMudar(desenharPainel);
 
   /* ---------- Telefone no formato (11) 98765-4321 enquanto digita ---------- */
   function mascara(e) {
@@ -305,14 +305,17 @@
   if (hash.startsWith('cadastro')) abrirAba('cadastro');
   if (hash === 'cadastro-social') $('cSocial').checked = true;
 
-  // quem ja entrou ve o atalho para a sua area
-  const atual = NYLT.pacienteAtual();
-  if (atual) {
-    $('area').hidden = true; $('jaEntrou').hidden = false;
-    $('titulo').textContent = 'Você já entrou';
-    $('subtitulo').textContent = 'Siga para a sua área ou troque de conta.';
-    $('jaEntrouTexto').textContent = `Conectado como ${atual.nome}.`;
-  }
+  // busca os dados no banco; quem ja entrou ve o atalho para a sua area
+  NYLT.carregar().then(() => {
+    desenharPainel();
+    const atual = NYLT.pacienteAtual();
+    if (atual) {
+      $('area').hidden = true; $('jaEntrou').hidden = false;
+      $('titulo').textContent = 'Você já entrou';
+      $('subtitulo').textContent = 'Siga para a sua área ou troque de conta.';
+      $('jaEntrouTexto').textContent = `Conectado como ${atual.nome}.`;
+    }
+  }).catch(() => {});
   $('btnTrocar').onclick = () => { NYLT.sair(); $('area').hidden = false; $('jaEntrou').hidden = true; abrirAba('entrar'); };
 
   function ocupado(botao, sim) { botao.setAttribute('aria-busy', sim); botao.disabled = sim; }

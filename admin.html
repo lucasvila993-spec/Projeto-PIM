@@ -11,7 +11,7 @@
   Versao HTML do nylt_agenda.c: mesmas regras (agenda 10h-17h, horarios
   16h e 17h reservados ao social, fila por pontuacao com bubble sort).
   Acrescenta: registro de presenca e faltas, exclusao de paciente,
-  revisao humana da fila com historico e recursos de acessibilidade. Os dados ficam salvos no navegador e podem ser
+  revisao humana da fila com historico. Os dados ficam no banco do Supabase e podem ser
   exportados/importados no mesmo formato dos arquivos pacientes.txt,
   agenda.txt e fila.txt (mais presenca.txt).
 -->
@@ -28,17 +28,8 @@
     --fio: linear-gradient(90deg, var(--ouro), var(--ouro-claro));
     --raio: 10px; --raio-g: 16px;
   }
-  /* Alto contraste (acessibilidade) */
-  :root[data-contraste] {
-    --creme: #000; --superficie: #000; --tinta: #fff; --tinta-2: #fff;
-    --ouro: #ffd54f; --ouro-claro: #ffd54f; --ouro-suave: #262000; --ouro-texto: #ffd54f;
-    --linha: #fff; --marinho-suave: #1a1a1a; --perigo: #ff7b7b; --perigo-suave: #330000;
-    --sobre-tinta: #000; --part: #fff; --lateral: #000;
-  }
   * { box-sizing: border-box; }
   html { font-size: 15px; color-scheme: light; }
-  html[data-fonte="1"] { font-size: 17px; }
-  html[data-fonte="2"] { font-size: 19px; }
   body { margin: 0; background: var(--superficie); color: var(--tinta); font: 1rem/1.55 Montserrat, "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
   :focus-visible { outline: 3px solid var(--ouro); outline-offset: 2px; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
@@ -52,7 +43,6 @@
   .logo-placa { display: block; border-radius: var(--raio-g); }
   .logo-placa img { display: block; width: 100%; height: auto; }
   .logo-placa .logo-marca { display: none; }
-  :root[data-contraste] .logo-placa { background: #F6F5F1; padding: 10px; }
   nav { display: flex; flex-direction: column; gap: 2px; }
   nav button { display: flex; align-items: center; gap: 12px; background: none; border: none; border-radius: var(--raio); padding: 11px 14px; font: inherit; font-weight: 500; color: var(--tinta-2); cursor: pointer; text-align: left; position: relative; }
   nav button svg { width: 20px; height: 20px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
@@ -60,18 +50,19 @@
   nav button[aria-selected="true"] { color: var(--tinta); background: var(--superficie); font-weight: 600; box-shadow: 0 1px 0 var(--linha), 0 0 0 1px var(--linha); }
   nav button[aria-selected="true"] svg { stroke: var(--ouro); }
   nav button[aria-selected="true"]::before { content: ""; position: absolute; left: -22px; top: 10px; bottom: 10px; width: 3px; border-radius: 0 3px 3px 0; background: var(--fio); }
-  .acess { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .acess p { grid-column: 1 / -1; margin: 0 0 2px; font-size: .8rem; font-weight: 600; color: var(--tinta-2); }
-  .acess #btnContraste { grid-column: 1 / -1; }
   .creditos { font-size: .75rem; color: var(--tinta-2); margin: 0; line-height: 1.5; }
 
   main { padding: 44px 48px 64px; max-width: 1720px; width: 100%; min-width: 0; outline: none; }
   @media (min-width: 1600px) { main { padding: 48px 64px 72px; } }
   section[hidden] { display: none; }
-  .cabeca { margin-bottom: 28px; }
-  h2 { margin: 0; font-size: 2.15rem; font-weight: 300; letter-spacing: -.01em; line-height: 1.15; }
-  .cabeca::after { content: ""; display: block; width: 56px; height: 2px; margin-top: 14px; border-radius: 2px; background: var(--fio); }
-  .sub { margin: 8px 0 0; color: var(--tinta-2); max-width: 64ch; }
+  /* cabecalho de cada secao: faixa azul-marinho, titulo forte e o numero que mais importa ali */
+  .cabeca { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 20px 40px; margin-bottom: 28px; padding: 30px 36px; border-radius: 20px; background: var(--tinta); color: #E7EBF1; border-bottom: 4px solid var(--ouro-claro); }
+  h2 { margin: 0; font-size: 2.15rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.15; color: #FFFFFF; }
+  .sub { margin: 10px 0 0; color: var(--tinta-2); max-width: 64ch; }
+  .cabeca .sub { color: #C9D3E0; }
+  .resumo { min-width: 170px; padding: 16px 22px; border-radius: 14px; background: rgba(255, 255, 255, .07); text-align: right; }
+  .resumo b { display: block; font-size: 2.2rem; font-weight: 700; line-height: 1.05; color: var(--ouro-claro); font-variant-numeric: tabular-nums; }
+  .resumo span { display: block; margin-top: 4px; font-size: .85rem; color: #C9D3E0; }
 
   @media (max-width: 900px) {
     .app { grid-template-columns: minmax(0, 1fr); }
@@ -79,8 +70,6 @@
     .logo-placa { width: 72px; }
     .logo-placa .logo-full { display: none; }
     .logo-placa .logo-marca { display: block; }
-    .acess { margin: 0 0 0 auto; display: flex; }
-    .acess p { display: none; }
     .creditos { display: none; }
     nav { flex: 1 0 100%; order: 3; flex-direction: row; overflow-x: auto; margin: 0 -16px; padding: 0 12px; gap: 0; scrollbar-width: none; }
     nav button { padding: 12px 12px 14px; border-radius: 0; white-space: nowrap; background: none !important; box-shadow: none !important; }
@@ -88,6 +77,8 @@
     nav button[aria-selected="true"]::before { left: 12px; right: 12px; top: auto; bottom: 0; width: auto; height: 3px; border-radius: 3px 3px 0 0; }
     main { padding: 28px 16px 48px; }
     h2 { font-size: 1.75rem; }
+    .cabeca { grid-template-columns: 1fr; padding: 24px 22px; }
+    .resumo { text-align: left; justify-self: start; }
   }
 
   /* ---------- Componentes ---------- */
@@ -129,6 +120,55 @@
   input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--linha); border-radius: var(--raio); background: var(--creme); color: var(--tinta); font: inherit; }
   input:focus, select:focus, textarea:focus { border-color: var(--ouro); outline: 2px solid var(--ouro-suave); outline-offset: 0; background: var(--superficie); }
   textarea { resize: vertical; min-height: 76px; }
+  input[type="file"] { padding: 8px; cursor: pointer; color: var(--tinta-2); }
+  input[type="file"]::file-selector-button { margin-right: 14px; padding: 9px 16px; border: none; border-radius: 8px; background: var(--tinta); color: var(--sobre-tinta); font: inherit; font-weight: 600; cursor: pointer; transition: background .15s; }
+  input[type="file"]::file-selector-button:hover { background: var(--tinta-2); }
+
+  /* ---------- Tela de entrada da recepcao ---------- */
+  /* a esquerda, o coracao da logo com a semana real da clinica; a direita, o formulario em fundo branco */
+  .login { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); background: var(--superficie); }
+  .login[hidden], .app[hidden] { display: none; }
+  .login-lado { display: flex; flex-direction: column; gap: 32px; padding: 40px clamp(28px, 4.5vw, 64px); background: var(--tinta); color: #C9D3E0; }
+  .login-marca { display: flex; align-items: center; gap: 14px; color: #FFFFFF; font-weight: 700; font-size: 1.15rem; letter-spacing: .04em; }
+  .login-marca .selo { display: inline-grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: var(--creme); }
+  .login-marca .selo img { width: 42px; height: auto; }
+  .login-marca small { display: block; font-size: .8rem; font-weight: 500; letter-spacing: 0; color: var(--ouro-claro); }
+  .login-semana { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .login-semana h2 { font-size: clamp(1.9rem, 2.8vw, 2.6rem); }
+  .login-semana > p { margin: 10px 0 0; max-width: 40ch; }
+  .login-coracao { display: block; width: 100%; max-width: 360px; height: auto; margin: 28px 0 14px; }
+  .login-coracao .dia { font: 600 19px Montserrat, sans-serif; fill: #C9D3E0; }
+  .login-legenda { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: .85rem; }
+  .login-legenda li { display: flex; align-items: center; gap: 8px; }
+  .login-legenda i { width: 13px; height: 13px; border-radius: 4px; }
+  .login-ocupacao { margin: 22px 0 0; display: flex; align-items: baseline; gap: 12px; }
+  .login-ocupacao b { font-size: 2rem; font-weight: 700; color: var(--ouro-claro); font-variant-numeric: tabular-nums; }
+  .login-lado a { color: var(--ouro-claro); font-size: .85rem; font-weight: 600; }
+  .login-direita { display: flex; flex-direction: column; justify-content: center; padding: 48px clamp(24px, 6vw, 96px); }
+  .login-form { width: 100%; max-width: 420px; }
+  .login-form .saudacao { margin: 0 0 6px; padding-left: 14px; border-left: 4px solid var(--ouro-claro); font-weight: 600; color: var(--ouro-texto); }
+  .login-form h3 { margin: 0; font-size: 2.1rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.15; }
+  .login-form > p.instrucao { margin: 10px 0 32px; color: var(--tinta-2); }
+  .login-form .field { margin-bottom: 20px; }
+  .login-form .field input { min-height: 52px; padding: 12px 16px; border-radius: 12px; }
+  .senha-caixa { position: relative; }
+  .senha-caixa input { padding-right: 96px !important; }
+  .senha-caixa button { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); padding: 8px 12px; border: none; border-radius: 8px; background: none; color: var(--ouro-texto); font: inherit; font-size: .87rem; font-weight: 600; cursor: pointer; }
+  .senha-caixa button:hover { background: var(--ouro-suave); }
+  .login-erro { margin: 0 0 20px; padding: 12px 16px; border-radius: 12px; background: var(--perigo-suave); color: var(--perigo); font-size: .9rem; font-weight: 600; }
+  .login-form .btn { width: 100%; min-height: 54px; margin-top: 8px; border-radius: 12px; font-size: 1.02rem; }
+  .login-form .btn:active { transform: scale(.98); }
+  .login-dica { margin: 28px 0 0; padding: 16px 18px; border-radius: 12px; background: var(--creme); font-size: .87rem; color: var(--tinta-2); }
+  .login-dica b { color: var(--tinta); }
+  @media (max-width: 900px) {
+    .login { grid-template-columns: 1fr; }
+    .login-lado { padding: 24px 20px 28px; gap: 20px; }
+    .login-coracao, .login-legenda { display: none; }
+    .login-ocupacao, .login-lado > a, .login-semana > p { display: none; }
+    .login-direita { padding: 32px 20px 48px; }
+    .login-form h3 { font-size: 1.75rem; }
+  }
+  .sair { margin-top: auto; }
   .check { display: flex; align-items: center; gap: 10px; font-weight: 500; font-size: .93rem; cursor: pointer; }
   .check input { width: 18px; height: 18px; accent-color: var(--ouro); }
 
@@ -173,7 +213,6 @@
   .btn.ghost.danger:hover { border-color: var(--perigo); background: var(--perigo-suave); }
   .btn.block { width: 100%; }
   .btn.sm { padding: 6px 12px; font-size: .85rem; }
-  :root[data-contraste] .btn:not(.ghost) { color: #000; background: var(--ouro); border-color: var(--ouro); }
 
   .table-wrap { overflow-x: auto; position: relative; }
   table { width: 100%; border-collapse: collapse; }
@@ -193,7 +232,6 @@
   .seg { display: inline-flex; background: var(--superficie); border: 1px solid var(--linha); border-radius: 99px; padding: 4px; }
   .seg button { border: none; background: none; padding: 8px 18px; border-radius: 99px; font: inherit; font-weight: 500; color: var(--tinta-2); cursor: pointer; }
   .seg button[aria-pressed="true"] { background: var(--tinta); color: var(--sobre-tinta); font-weight: 600; }
-  :root[data-contraste] .seg button[aria-pressed="true"] { background: var(--ouro); color: #000; }
   .legend { display: flex; gap: 16px; font-size: .82rem; color: var(--tinta-2); flex-wrap: wrap; background: var(--superficie); border: 1px solid var(--linha); border-radius: 99px; padding: 8px 16px; }
   .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 4px; margin-right: 6px; vertical-align: -1px; border: 1px solid var(--linha); }
 
@@ -220,15 +258,14 @@
   .slot.busy:hover { filter: brightness(1.08); }
   .slot.faltou { background: var(--perigo-suave); color: var(--perigo); border: 1px dashed var(--perigo); }
   .slot.faltou .nome { text-decoration: line-through; }
-  :root[data-contraste] .slot.busy:not(.faltou) { color: #000; background: var(--tinta); }
-  :root[data-contraste] .slot.busy.soc { background: var(--ouro); }
 
   /* ---------- Relatorio ---------- */
   .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0; margin-bottom: 24px; background: var(--superficie); border: 1px solid var(--linha); border-radius: var(--raio-g); overflow: hidden; }
   .stat { padding: 20px 22px; border-right: 1px solid var(--linha); }
   .stat:last-child { border-right: none; }
-  .stat .n { font-size: 2.2rem; font-weight: 300; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .stat .n { font-size: 2.2rem; font-weight: 700; color: var(--tinta); line-height: 1.1; font-variant-numeric: tabular-nums; }
   .stat .l { color: var(--tinta-2); font-size: .85rem; margin-top: 4px; }
+  .stat:first-child .n { color: var(--ouro-texto); }
   .bar { height: 6px; background: var(--marinho-suave); border-radius: 99px; overflow: hidden; margin-top: 6px; }
   .bar span { display: block; height: 100%; background: var(--fio); border-radius: 99px; }
 
@@ -252,6 +289,9 @@
   @keyframes abrir { from { opacity: 0; transform: translateY(8px); } }
   dialog h3 { margin: 0 0 4px; font-size: 1.3rem; font-weight: 600; }
   dialog .sub { margin: 0 0 18px; }
+  dialog .sub .nome { color: var(--ouro-texto); font-weight: 700; }
+  /* relatorio: os numeros ficam centralizados embaixo do nome da coluna */
+  .tabela-relatorio th:not(:first-child):not(:last-child), .tabela-relatorio td:not(:last-child) { text-align: center; font-variant-numeric: tabular-nums; }
   .actions { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; margin-top: 20px; }
   .situacao { margin: 0 0 10px; font-size: .87rem; font-weight: 600; }
   .presenca { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
@@ -260,14 +300,62 @@
   #toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); opacity: 0; transition: .25s; background: var(--tinta); color: var(--sobre-tinta); padding: 13px 20px; border-radius: 99px; font-size: .92rem; font-weight: 500; max-width: calc(100% - 32px); pointer-events: none; z-index: 10; box-shadow: 0 10px 30px rgba(27,47,72,.25); border-left: 4px solid var(--ouro-claro); }
   #toast.show { opacity: 1; transform: translateX(-50%); }
   #toast.err { background: var(--perigo); color: #fff; border-left-color: #fff; }
-  .rodape { margin-top: 48px; color: var(--tinta-2); font-size: .8rem; display: none; }
-  @media (max-width: 900px) { .rodape { display: block; } }
 </style>
 </head>
 <body>
 <a href="#conteudo" class="pular">Pular para o conteúdo</a>
 
-<div class="app">
+<!-- ===== Entrada da recepcao ===== -->
+<div class="login" id="login">
+  <div class="login-lado">
+    <div class="login-marca">
+      <span class="selo"><img src="assets/logo-marca-transparente.webp" alt="" width="42" height="42"></span>
+      <span>NYLT<small>Clínica Saúde NYLT</small></span>
+    </div>
+    <div class="login-semana">
+      <h2>Área da recepção</h2>
+      <p>Agenda, pacientes e fila do atendimento social num só lugar. Esta é a semana da clínica agora.</p>
+      <!-- o coracao da logo vira a semana: 5 dias x 8 horarios, 16h e 17h em dourado -->
+      <svg class="login-coracao" viewBox="0 0 520 470" aria-hidden="true" style="overflow: visible">
+        <defs><clipPath id="loginCorte"><path d="M260 452C140 372 24 290 24 168 24 96 82 40 152 40c46 0 84 24 108 60 24-36 62-60 108-60 70 0 128 56 128 128 0 122-116 204-236 284z"/></clipPath></defs>
+        <g id="loginGrade" clip-path="url(#loginCorte)"></g>
+        <path d="M260 452C140 372 24 290 24 168 24 96 82 40 152 40c46 0 84 24 108 60 24-36 62-60 108-60 70 0 128 56 128 128 0 122-116 204-236 284z" fill="none" stroke="#D6B57A" stroke-width="6"/>
+        <g id="loginDias"></g>
+      </svg>
+      <ul class="login-legenda" aria-hidden="true">
+        <li><i style="background:#C7D3E2"></i>Livre</li>
+        <li><i style="background:#7F95B4"></i>Poucas vagas</li>
+        <li><i style="background:#0F1E31; outline: 1px solid #3A5578"></i>Lotado</li>
+        <li><i style="background:#E8D3AA"></i>Social</li>
+      </ul>
+      <p class="login-ocupacao"><b id="loginOcupacao">0%</b><span>da agenda da semana ocupada</span></p>
+    </div>
+    <a href="/home">Voltar para o site da clínica</a>
+  </div>
+  <div class="login-direita">
+    <form class="login-form" id="formLogin" novalidate>
+      <p class="saudacao" id="loginSaudacao">Olá</p>
+      <h3>Entrar na recepção</h3>
+      <p class="instrucao">Use o usuário e a senha da recepção.</p>
+      <p class="login-erro" id="loginErro" role="alert" hidden></p>
+      <div class="field">
+        <label for="loginUsuario">Usuário</label>
+        <input id="loginUsuario" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+      </div>
+      <div class="field">
+        <label for="loginSenha">Senha</label>
+        <div class="senha-caixa">
+          <input id="loginSenha" type="password" autocomplete="current-password" required>
+          <button type="button" id="loginMostrar" aria-controls="loginSenha" aria-pressed="false">Mostrar</button>
+        </div>
+      </div>
+      <button class="btn" type="submit">Entrar</button>
+      <p class="login-dica"><b>O acesso fica aberto</b> até fechar esta aba ou clicar em Sair da recepção.</p>
+    </form>
+  </div>
+</div>
+
+<div class="app" id="app" hidden>
 <aside class="lateral">
   <h1 class="sr">NYLT Agenda — Clínica Saúde NYLT</h1>
   <div class="logo-placa">
@@ -286,14 +374,8 @@
     <button role="tab" id="tab-dados" aria-controls="dados" aria-selected="false" tabindex="-1">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/></svg>Dados</button>
   </nav>
-  <div class="acess" role="group" aria-label="Acessibilidade">
-    <p>Acessibilidade</p>
-    <button class="btn ghost sm" id="fonteMenos" aria-label="Diminuir tamanho do texto">A−</button>
-    <button class="btn ghost sm" id="fonteMais" aria-label="Aumentar tamanho do texto">A+</button>
-    <button class="btn ghost sm" id="btnContraste" aria-pressed="false">Alto contraste</button>
-  </div>
+  <button class="btn ghost sm sair" id="btnSair" type="button">Sair da recepção</button>
   <p class="creditos"><a href="/home" style="color:inherit">Abrir o site dos pacientes</a></p>
-  <p class="creditos">PIM II, ADS, UNIP. Lucas Vila da Silva, Nicolas Paranhos Lambiase de Matos, Tiago Araujo De Jesus e Yuri Lima Moreira da Silva.</p>
 </aside>
 
 <main id="conteudo" tabindex="-1">
@@ -301,8 +383,11 @@
   <!-- ===== Pacientes ===== -->
   <section id="pacientes" role="tabpanel" aria-labelledby="tab-pacientes">
     <div class="cabeca">
-      <h2>Pacientes</h2>
-      <p class="sub">Cadastre pacientes particulares ou do atendimento social.</p>
+      <div>
+        <h2>Pacientes</h2>
+        <p class="sub">Cadastre pacientes particulares ou do atendimento social.</p>
+      </div>
+      <p class="resumo"><b id="resPacientes">0</b><span>pacientes cadastrados</span></p>
     </div>
     <div class="grid2 pac">
       <form class="card destaque" id="formPaciente">
@@ -333,8 +418,11 @@
   <!-- ===== Agenda ===== -->
   <section id="agenda" role="tabpanel" aria-labelledby="tab-agenda" hidden>
     <div class="cabeca">
-      <h2>Agenda da semana</h2>
-      <p class="sub">Clique em um horário livre para agendar. Clique em uma consulta para confirmar, registrar presença ou falta, ou cancelar.</p>
+      <div>
+        <h2>Agenda da semana</h2>
+        <p class="sub">Clique em um horário livre para agendar. Clique em uma consulta para confirmar, registrar presença ou falta, ou cancelar.</p>
+      </div>
+      <p class="resumo"><b id="resAgenda">0</b><span>consultas marcadas</span></p>
     </div>
     <div class="toolbar">
       <div class="seg" id="segProf" role="group" aria-label="Profissional"></div>
@@ -352,8 +440,11 @@
   <!-- ===== Fila social ===== -->
   <section id="fila" role="tabpanel" aria-labelledby="tab-fila" hidden>
     <div class="cabeca">
-      <h2>Fila do atendimento social</h2>
-      <p class="sub">Ordenada pela pontuação de prioridade, com critérios públicos e objetivos. Toda decisão automática pode ser revisada por uma pessoa.</p>
+      <div>
+        <h2>Fila do atendimento social</h2>
+        <p class="sub">Ordenada pela pontuação de prioridade, com critérios públicos e objetivos. Toda decisão automática pode ser revisada por uma pessoa.</p>
+      </div>
+      <p class="resumo"><b id="resFila">0</b><span>aguardando na fila</span></p>
     </div>
     <div class="grid2 fil">
       <div>
@@ -401,11 +492,14 @@
   <!-- ===== Relatorio ===== -->
   <section id="relatorio" role="tabpanel" aria-labelledby="tab-relatorio" hidden>
     <div class="cabeca">
-      <h2>Relatório da semana</h2>
-      <p class="sub">Consultas, faltas e ocupação por profissional (40 horários por semana cada).</p>
+      <div>
+        <h2>Relatório da semana</h2>
+        <p class="sub">Consultas, faltas e ocupação por profissional (40 horários por semana cada).</p>
+      </div>
+      <p class="resumo"><b id="resOcupacao">0</b><span>da agenda ocupada</span></p>
     </div>
     <div class="stats" id="statsGeral"></div>
-    <div class="card table-wrap"><table>
+    <div class="card table-wrap"><table class="tabela-relatorio">
       <caption class="sr">Relatório por profissional</caption>
       <thead><tr><th scope="col">Profissional</th><th scope="col">Consultas</th><th scope="col">Sociais</th><th scope="col">Confirmadas</th><th scope="col">Compareceram</th><th scope="col">Faltas</th><th scope="col" style="min-width:120px">Ocupação</th></tr></thead>
       <tbody id="tbRelatorio"></tbody>
@@ -415,8 +509,11 @@
   <!-- ===== Dados ===== -->
   <section id="dados" role="tabpanel" aria-labelledby="tab-dados" hidden>
     <div class="cabeca">
-      <h2>Dados</h2>
-      <p class="sub">Os dados ficam salvos somente neste navegador. Use os arquivos .txt para trocar dados com o programa em C.</p>
+      <div>
+        <h2>Dados</h2>
+        <p class="sub">Os dados ficam no banco da clínica (Supabase). Use os arquivos .txt para trocar dados com o programa em C.</p>
+      </div>
+      <p class="resumo"><b id="resDados">0</b><span>registros salvos</span></p>
     </div>
     <div class="grid2">
       <div class="card">
@@ -441,7 +538,6 @@
       <button class="btn ghost" id="btnExemplo">Carregar dados de exemplo</button>
     </div>
   </section>
-  <p class="rodape">PIM II, ADS, UNIP. Lucas Vila da Silva, Nicolas Paranhos Lambiase de Matos, Tiago Araujo De Jesus e Yuri Lima Moreira da Silva.</p>
 </main>
 </div>
 
@@ -499,6 +595,7 @@
 
 <div id="toast" role="status" aria-live="polite"></div>
 
+<script src="assets/nylt-dados.js"></script>
 <script>
 /* ---------- Constantes do sistema (iguais ao nylt_agenda.c) ---------- */
 const MAX_PACIENTES = 100, MAX_FILA = 50;
@@ -509,7 +606,6 @@ const PRIMEIRO_SOCIAL = 6;   // 16h e 17h sao sociais
 const URGENCIAS = ['', 'Baixa', 'Média', 'Alta'];
 const SITUACOES = ['Agendada', 'Confirmada', 'Compareceu', 'Faltou'];
 const AGENDADA = 0, CONFIRMADA = 1, COMPARECEU = 2, FALTOU = 3;
-const CHAVE = 'nylt_agenda_v1', CHAVE_PREF = 'nylt_agenda_pref';
 
 /* ---------- Dados ---------- */
 let pacientes = [];   // {id, nome, telefone, idade, social}
@@ -528,19 +624,43 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const reais = v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
+/* ---------- Banco de dados (Supabase) ----------
+   A tela trabalha com os dados na memoria e grava tudo no banco a cada mudanca.
+   versaoLida e a versao dos dados quando a recepcao os leu: se um paciente marcar ou cancelar
+   pelo site nesse meio tempo, o banco recusa a gravacao e a tela recarrega, sem apagar nada. */
+const CHAVE_ADMIN = 'nylt_admin_sessao';
+let versaoLida = 0;
+let gravacoes = Promise.resolve();   // uma gravacao por vez, na ordem
+let gravando = 0;
+const tokenAdmin = () => { try { return sessionStorage.getItem(CHAVE_ADMIN); } catch (e) { return null; } };
+
 function salvarDados() {
-  try { localStorage.setItem(CHAVE, JSON.stringify({ pacientes, fila, agenda, presenca, historico })); } catch (e) {}
+  gravando++;
+  gravacoes = gravacoes.then(async () => {
+    try {
+      versaoLida = await NYLT.rpc('recepcao_salvar', {
+        p_token: tokenAdmin(), p_estado: { pacientes, fila, agenda, presenca, historico }, p_versao: versaoLida
+      });
+    } catch (err) {
+      if (err.message === 'CONFLITO') {
+        await carregarDados();
+        renderizar();
+        aviso('Um paciente mudou a agenda pelo site agora há pouco. Os dados foram atualizados: confira e refaça a última ação.', true);
+      } else if (err.message === 'SESSAO') {
+        sairDaRecepcao('Sua sessão acabou. Entre de novo.');
+      } else {
+        aviso('Não foi possível gravar no banco: ' + err.message, true);
+      }
+    } finally { gravando--; }
+  });
+  return gravacoes;
 }
-function carregarDados() {
-  try {
-    const d = JSON.parse(localStorage.getItem(CHAVE));
-    if (d) {
-      pacientes = d.pacientes || []; fila = d.fila || []; agenda = d.agenda || novaAgenda();
-      presenca = d.presenca || novaAgenda(); historico = d.historico || [];
-      return true;
-    }
-  } catch (e) {}
-  return false;
+async function carregarDados() {
+  const r = await NYLT.rpc('recepcao_estado', { p_token: tokenAdmin() });
+  if (!r) return false;   // sessao acabou
+  ({ pacientes, fila, agenda, presenca, historico } = r.estado);
+  versaoLida = r.versao;
+  return true;
 }
 
 let toastTimer;
@@ -552,20 +672,6 @@ function aviso(msg, erro) {
   toastTimer = setTimeout(() => t.className = '', 3500);
 }
 function abrir(dlg) { dlg.returnValue = ''; atualizarSelects(); dlg.showModal(); }
-
-/* ---------- Acessibilidade: fonte e contraste ---------- */
-let pref = { fonte: 0, contraste: false };
-try { pref = Object.assign(pref, JSON.parse(localStorage.getItem(CHAVE_PREF))); } catch (e) {}
-function aplicarPref() {
-  document.documentElement.dataset.fonte = pref.fonte;
-  if (pref.contraste) document.documentElement.dataset.contraste = '';
-  else delete document.documentElement.dataset.contraste;
-  $('btnContraste').setAttribute('aria-pressed', pref.contraste);
-  try { localStorage.setItem(CHAVE_PREF, JSON.stringify(pref)); } catch (e) {}
-}
-$('fonteMais').onclick = () => { pref.fonte = Math.min(2, pref.fonte + 1); aplicarPref(); };
-$('fonteMenos').onclick = () => { pref.fonte = Math.max(0, pref.fonte - 1); aplicarPref(); };
-$('btnContraste').onclick = () => { pref.contraste = !pref.contraste; aplicarPref(); };
 
 /* ---------- Abas (navegaveis por setas do teclado) ---------- */
 const abas = [...document.querySelectorAll('[role=tab]')];
@@ -688,7 +794,7 @@ $('tbAgenda').onclick = e => {
   const id = agenda[profAtual][d][h];
   if (id) {
     const p = buscarPaciente(id);
-    $('coTexto').textContent = `${p ? p.nome : 'Paciente'} — ${quando}`;
+    $('coTexto').innerHTML = `<span class="nome">${esc(p ? p.nome : 'Paciente')}</span> — ${esc(quando)}`;
     $('coStatus').textContent = SITUACOES[presenca[profAtual][d][h]];
     abrir($('dlgConsulta'));
     return;
@@ -976,9 +1082,8 @@ $('btnImportar').onclick = async () => {
 };
 
 $('btnLimpar').onclick = () => {
-  if (!confirm('Apagar todos os pacientes, consultas, faltas, a fila e o histórico deste navegador?')) return;
+  if (!confirm('Apagar do banco todos os pacientes (e as contas deles no site), consultas, faltas, a fila e o histórico?')) return;
   pacientes = []; fila = []; agenda = novaAgenda(); presenca = novaAgenda(); historico = [];
-  try { localStorage.removeItem('nylt_contas_v1'); localStorage.removeItem('nylt_sessao'); } catch (e) {}
   salvarDados();
   renderizar();
   aviso('Dados apagados.');
@@ -1129,7 +1234,12 @@ function carregarExemplo() {
     ['Juliana Santos', '(11) 97310-9924', 39, 1], ['Lucas Ferreira', '(11) 96688-1435', 6, 1],
     ['Fernanda Ribeiro', '(11) 99102-7783', 52, 0], ['Paulo Henrique Alves', '(11) 95874-2261', 61, 1],
     ['Camila Rocha', '(11) 98067-5518', 25, 0], ['Antônia Gomes', '(11) 97793-4026', 80, 1],
-    ['Diego Martins', '(11) 96451-8870', 31, 1]
+    ['Diego Martins', '(11) 96451-8870', 31, 1], ['Gabriel Souza', '(11) 98112-3344', 22, 0],
+    ['Larissa Mendes', '(11) 97221-5566', 33, 0], ['Roberto Carlos Dias', '(11) 96330-7788', 58, 0],
+    ['Sônia Regina Lopes', '(11) 95449-9900', 66, 1], ['Thiago Barbosa', '(11) 99558-1122', 41, 0],
+    ['Isabela Cardoso', '(11) 98667-3355', 15, 0], ['Marcos Vinícius Teixeira', '(11) 97776-5577', 47, 0],
+    ['Helena Castro', '(11) 96885-7799', 4, 1], ['Pedro Almeida', '(11) 95994-2468', 36, 0],
+    ['Vera Lúcia Moraes', '(11) 99003-1357', 74, 1], ['Eduardo Nascimento', '(11) 98112-9753', 29, 1]
   ].map(([nome, telefone, idade, social], i) => ({ id: i + 1, nome, telefone, idade, social }));
 
   // [profissional, dia, horario, paciente, situacao] - situacao: 0 agendada, 1 confirmada, 2 compareceu, 3 faltou
@@ -1137,10 +1247,17 @@ function carregarExemplo() {
   [[0,0,0,2,2],[0,0,1,4,2],[0,0,3,6,3],[0,1,0,9,2],[0,1,2,11,1],[0,2,1,2,1],[0,2,4,4,0],[0,3,0,6,0],[0,3,5,9,0],[0,4,2,11,0],
    [0,0,6,1,2],[0,1,7,7,1],[0,2,6,3,0],[0,4,6,10,0],
    [1,0,2,9,2],[1,1,1,6,3],[1,1,4,4,1],[1,2,0,11,0],[1,3,3,2,0],[1,0,7,5,2],[1,2,7,12,0],[1,3,6,8,0],
-   [2,0,0,4,2],[2,0,4,9,2],[2,1,3,2,1],[2,2,2,6,0],[2,3,1,11,0],[2,4,0,4,0],[2,4,5,9,0],[2,0,6,10,2],[2,1,6,5,1],[2,3,7,12,0]
+   [2,0,0,4,2],[2,0,4,9,2],[2,1,3,2,1],[2,2,2,6,0],[2,3,1,11,0],[2,4,0,4,0],[2,4,5,9,0],[2,0,6,10,2],[2,1,6,5,1],[2,3,7,12,0],
+   // pacientes 14 a 24: semana mais cheia, com horarios lotados
+   [0,0,2,15,2],[0,0,5,16,3],[0,1,1,18,2],[0,1,3,20,1],[0,1,4,22,0],[0,1,5,15,0],[0,2,0,19,1],[0,2,2,16,0],[0,2,3,18,0],[0,2,5,20,0],
+   [0,3,1,22,0],[0,3,2,15,0],[0,3,3,19,0],[0,3,4,16,0],[0,4,0,18,0],[0,4,1,20,0],[0,4,3,22,0],[0,4,4,19,0],[0,4,5,15,0],[0,1,6,17,1],[0,3,7,23,0],
+   [1,0,0,20,2],[1,0,1,22,2],[1,0,3,18,2],[1,0,4,16,3],[1,1,0,15,1],[1,1,2,19,1],[1,2,1,20,0],[1,2,3,22,0],[1,3,0,16,0],[1,3,1,18,0],
+   [1,4,1,15,0],[1,4,2,19,0],[1,0,6,23,2],[1,4,7,24,0],
+   [2,0,1,16,2],[2,0,2,22,2],[2,0,3,20,3],[2,1,0,20,1],[2,1,1,15,1],[2,1,2,16,0],[2,2,0,22,0],[2,2,1,18,0],[2,2,3,19,0],[2,3,0,15,0],
+   [2,3,2,20,0],[2,4,1,16,0],[2,4,2,22,0],[2,2,6,17,0],[2,4,6,21,0],[2,4,7,23,0]
   ].forEach(([p, d, h, id, s]) => { agenda[p][d][h] = id; presenca[p][d][h] = s; });
 
-  fila = [[13, 280, 2], [7, 650, 3], [8, 900, 1], [3, 420, 2]].map(([id, renda, urg]) => ({
+  fila = [[13, 280, 2], [7, 650, 3], [8, 900, 1], [3, 420, 2], [21, 350, 2], [23, 180, 1], [24, 1200, 1]].map(([id, renda, urg]) => ({
     idPaciente: id, rendaPerCapita: renda, urgencia: urg,
     pontuacao: calcularPontuacao(renda, buscarPaciente(id).idade, urg)
   }));
@@ -1163,19 +1280,131 @@ function renderizar() {
   renderFila();
   renderRelatorio();
   atualizarSelects();
+  renderResumos();
 }
-aplicarPref();
+
+/* ---------- Numero de destaque no cabecalho de cada secao ---------- */
+function renderResumos() {
+  let marcadas = 0;
+  agenda.forEach(dias => dias.forEach(hs => hs.forEach(id => { if (id) marcadas++; })));
+  const capacidade = PROFISSIONAIS.length * DIAS.length * HORARIOS;
+  $('resPacientes').textContent = pacientes.length;
+  $('resAgenda').textContent = marcadas;
+  $('resFila').textContent = fila.length;
+  $('resOcupacao').textContent = Math.round(100 * marcadas / capacidade) + '%';
+  $('resDados').textContent = pacientes.length + fila.length + marcadas;
+}
+
+/* ---------- Entrada da recepcao ----------
+   Usuario e senha sao conferidos no banco (funcao recepcao_entrar, senha guardada com bcrypt).
+   Acesso de demonstracao do projeto: usuario "recepcao", senha "nylt2026". */
+function sairDaRecepcao(msg) {
+  const t = tokenAdmin();
+  try { sessionStorage.removeItem(CHAVE_ADMIN); } catch (e) {}
+  if (t) NYLT.rpc('recepcao_sair', { p_token: t }).catch(() => {});
+  mostrarApp(false);
+  if (msg) { $('loginErro').textContent = msg; $('loginErro').hidden = false; }
+}
+function mostrarApp(sim) {
+  $('login').hidden = sim;
+  $('app').hidden = !sim;
+  if (sim) $('conteudo').focus();
+  else {
+    desenharLogin(novaAgenda());
+    NYLT.rpc('estado_publico').then(d => desenharLogin(d.agenda)).catch(() => {});
+    $('loginUsuario').focus();
+  }
+}
+
+/* Tela de entrada: saudacao pelo horario e o coracao com a ocupacao real da semana */
+function desenharLogin(agenda) {
+  const agora = new Date(), hh = agora.getHours();
+  const data = agora.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+  $('loginSaudacao').textContent = `${hh < 12 ? 'Bom dia' : hh < 18 ? 'Boa tarde' : 'Boa noite'}, hoje é ${data}`;
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const grade = $('loginGrade'), dias = $('loginDias');
+  grade.innerHTML = ''; dias.innerHTML = '';
+  const x0 = 62, y0 = 66, larg = 74, alt = 40, gap = 6;
+  let marcadas = 0;
+  for (let hr = 0; hr < HORARIOS; hr++) {
+    for (let d = 0; d < DIAS.length; d++) {
+      // lotado (nenhum profissional livre), poucas vagas (1 ou 2), livre (os 3)
+      const livres = PROFISSIONAIS.filter((_, p) => !agenda[p][d][hr]).length;
+      marcadas += PROFISSIONAIS.length - livres;
+      const tons = hr >= PRIMEIRO_SOCIAL ? ['#9C7A48', '#C9A266', '#C9A266', '#E8D3AA'] : ['#0F1E31', '#7F95B4', '#7F95B4', '#C7D3E2'];
+      const r = document.createElementNS(svgNS, 'rect');
+      r.setAttribute('x', x0 + d * (larg + gap)); r.setAttribute('y', y0 + hr * (alt + gap));
+      r.setAttribute('width', larg); r.setAttribute('height', alt); r.setAttribute('rx', 8);
+      r.setAttribute('fill', tons[livres]);
+      grade.appendChild(r);
+    }
+  }
+  DIAS.forEach((nome, d) => {
+    const t = document.createElementNS(svgNS, 'text');
+    t.setAttribute('x', x0 + d * (larg + gap) + larg / 2); t.setAttribute('y', 22);
+    t.setAttribute('text-anchor', 'middle'); t.setAttribute('class', 'dia');
+    t.textContent = nome.slice(0, 3);
+    dias.appendChild(t);
+  });
+  $('loginOcupacao').textContent = Math.round(100 * marcadas / (PROFISSIONAIS.length * DIAS.length * HORARIOS)) + '%';
+}
+$('formLogin').addEventListener('submit', async e => {
+  e.preventDefault();
+  const usuario = $('loginUsuario').value.trim().toLowerCase();
+  const senha = $('loginSenha').value;
+  const erro = $('loginErro');
+  if (!usuario || !senha) {
+    erro.textContent = 'Preencha o usuário e a senha.';
+    erro.hidden = false;
+    (usuario ? $('loginSenha') : $('loginUsuario')).focus();
+    return;
+  }
+  const botao = $('formLogin').querySelector('button[type="submit"]');
+  botao.disabled = true;
+  try {
+    const t = await NYLT.rpc('recepcao_entrar', { p_usuario: usuario, p_senha: senha });
+    try { sessionStorage.setItem(CHAVE_ADMIN, t); } catch (er) {}
+    erro.hidden = true;
+    $('formLogin').reset();
+    await abrirSistema();
+  } catch (er) {
+    erro.textContent = er.message;
+    erro.hidden = false;
+    $('loginSenha').select();
+  } finally { botao.disabled = false; }
+});
+$('loginMostrar').addEventListener('click', () => {
+  const campo = $('loginSenha'), ver = campo.type === 'password';
+  campo.type = ver ? 'text' : 'password';
+  $('loginMostrar').textContent = ver ? 'Esconder' : 'Mostrar';
+  $('loginMostrar').setAttribute('aria-pressed', ver);
+});
+$('btnSair').addEventListener('click', () => sairDaRecepcao());
+
+// carrega o banco e mostra o sistema; na primeira vez (banco nunca gravado) entram os dados de exemplo
+async function abrirSistema() {
+  if (!(await carregarDados())) return sairDaRecepcao('Sua sessão acabou. Entre de novo.');
+  if (!pacientes.length && versaoLida === 1) carregarExemplo();
+  else renderizar();
+  mostrarApp(true);
+}
+
+// a cada 15 segundos confere se um paciente mudou algo pelo site e atualiza a tela
+setInterval(async () => {
+  if ($('app').hidden || document.hidden || gravando || document.querySelector('dialog[open]')) return;
+  try {
+    const v = await NYLT.rpc('recepcao_versao', { p_token: tokenAdmin() });
+    if (v === null) return sairDaRecepcao('Sua sessão acabou. Entre de novo.');
+    if (v !== versaoLida && !gravando && await carregarDados()) renderizar();
+  } catch (e) {}
+}, 15000);
 $('fUrg').dataset.tipo = 'urgencia';
 $('rvUrg').dataset.tipo = 'urgencia';
 ['fPaciente', 'fUrg', 'chamarProf', 'agPaciente', 'rvUrg'].forEach(id => criarSelect($(id)));
 renderSegProf();
-// na primeira vez que o sistema e aberto, mostra os dados de exemplo
-if (carregarDados()) renderizar();
-else carregarExemplo();
-// quando um paciente agenda pelo site em outra aba, a recepcao recarrega os dados
-window.addEventListener('storage', e => {
-  if (e.key === CHAVE && carregarDados()) renderizar();
-});
+// com uma sessao aberta nesta aba, volta direto para o sistema; senao, tela de entrada
+if (tokenAdmin()) abrirSistema().catch(() => sairDaRecepcao('Sem conexão com o banco. Confira a internet e tente de novo.'));
+else mostrarApp(false);
 </script>
 </body>
 </html>

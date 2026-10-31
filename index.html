@@ -145,12 +145,26 @@
   .topo h1 { max-width: 14ch; }
   .topo .intro { margin-top: 22px; }
   .topo-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 32px; }
-  .garantia { margin-top: 22px; font-size: var(--t5); color: var(--tinta-2); }
-  .garantia b { color: var(--tinta); font-weight: 600; }
+  /* as tres especialidades logo abaixo do texto, com os desenhos da secao seguinte */
+  .topo-esp { list-style: none; margin: 28px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .topo-esp a { display: inline-flex; align-items: center; gap: 10px; padding: 6px 16px 6px 6px; border-radius: 99px; background: var(--creme); font-size: var(--t5); font-weight: 600; color: var(--tinta); text-decoration: none; transition: background-color .2s; }
+  .topo-esp a:hover { background: var(--ouro-suave); }
+  .topo-esp svg { width: 34px; height: 34px; padding: 5px; border-radius: 50%; background: var(--branco); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 3.4; }
+  /* fatos da clinica: horario, endereco e social, cada um com um simbolo dourado */
+  .fatos { list-style: none; margin: 36px 0 0; padding: 22px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, auto)); justify-content: start; gap: 12px 32px; border-top: 3px solid var(--ouro-suave); }
+  .fatos li { display: flex; align-items: flex-start; gap: 10px; font-size: var(--t5); line-height: 1.45; color: var(--tinta-2); }
+  .fatos b { display: block; color: var(--tinta); font-weight: 600; }
+  .fatos svg { flex: none; width: 22px; height: 22px; margin-top: 1px; fill: none; stroke: var(--ouro); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  /* o coracao fica num campo creme, que da cor ao topo */
+  .palco { position: relative; background: var(--creme); border-radius: 32px; padding: clamp(20px, 2.4vw, 32px) clamp(20px, 3vw, 40px) 28px; }
   .semana { position: relative; margin: 0; }
   .semana svg { width: 100%; height: auto; }
-  .semana .dia-rotulo { font: 600 13px Montserrat, sans-serif; fill: var(--tinta-2); }
-  .cartao-vivo { position: absolute; left: -3%; top: 2%; background: var(--creme); border-radius: var(--raio); padding: 16px 20px; max-width: 280px; }
+  .semana .dia-rotulo { font: 600 19px Montserrat, sans-serif; fill: var(--tinta-2); }
+  .cartao-vivo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 20px; background: var(--branco); border-radius: var(--raio); border-left: 4px solid var(--ouro-claro); padding: 14px 20px; margin-bottom: 28px; }
+  .cartao-vivo a { font-size: var(--t5); font-weight: 600; color: var(--ouro-texto); white-space: nowrap; }
+  /* cartao azul do social, por cima do coracao */
+  .cartao-social { position: absolute; right: -7%; bottom: 25%; background: var(--tinta); color: #E7EBF1; border-radius: var(--raio); padding: 14px 18px; max-width: 200px; font-size: var(--t5); line-height: 1.45; }
+  .cartao-social strong { display: block; font-size: var(--t3); color: var(--ouro-claro); }
   .cartao-vivo p { font-size: var(--t5); color: var(--tinta-2); }
   .cartao-vivo strong { display: block; font-size: var(--t3); color: var(--tinta); margin-top: 2px; }
   .cartao-vivo .ponto { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #3E8E5A; margin-right: 8px; vertical-align: 1px; animation: pulsa 2.4s ease-in-out infinite; }
@@ -236,26 +250,53 @@
 
   /* ---------- Perguntas frequentes ---------- */
   .duvidas { background: var(--creme); padding: var(--secao) 0; }
-  .duvidas .conteiner { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 32px 72px; align-items: start; }
-  .duvidas .intro { margin-top: 16px; font-size: var(--t4); }
-  .duvidas .intro a { font-weight: 600; }
-  .faq { display: grid; gap: 12px; }
-  .faq details { background: var(--branco); border-radius: var(--raio); }
-  .faq summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 24px; font-weight: 600; cursor: pointer; }
+  .duvidas .conteiner { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 48px 80px; align-items: start; }
+  .duvidas-lado { position: sticky; top: 112px; }
+  .duvidas-lado .intro { margin-top: 16px; }
+  /* painel da recepcao: o mesmo azul do topo, com o telefone em dourado */
+  .recepcao { margin-top: 36px; padding: 32px; border-radius: 24px; background: var(--tinta); color: #D5DCE6; }
+  .recepcao h3 { color: var(--branco); }
+  .status { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-size: var(--t5); font-weight: 600; color: var(--branco); }
+  .status::before { content: ""; flex: none; width: 10px; height: 10px; border-radius: 50%; background: #7F95B4; }
+  .status.aberta::before { background: #8FD19E; }
+  .recepcao .fone { display: inline-block; margin-top: 22px; font-size: var(--t2); font-weight: 700; letter-spacing: -.015em; color: var(--ouro-claro); text-decoration: none; }
+  .recepcao .fone:hover { color: #E2C48C; }
+  .recepcao dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; margin: 18px 0 0; font-size: var(--t5); }
+  .recepcao dt { color: var(--ouro-claro); font-weight: 600; }
+  .recepcao dd { margin: 0; color: #E7EBF1; }
+  .faq-grupo + .faq-grupo { margin-top: 44px; }
+  .faq-grupo h3 { margin-bottom: 14px; color: var(--ouro-texto); }
+  .faq { display: grid; gap: 8px; }
+  .faq details { background: var(--creme-2); border-radius: 18px; transition: background-color .25s; }
+  .faq details[open] { background: var(--branco); }
+  .faq summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 18px 20px 18px 24px; font-size: var(--t4); font-weight: 600; cursor: pointer; border-radius: 18px; }
   .faq summary::-webkit-details-marker { display: none; }
-  .faq summary::after { content: ""; flex: none; width: 12px; height: 12px; border-right: 2.5px solid var(--ouro); border-bottom: 2.5px solid var(--ouro); transform: rotate(45deg) translate(-3px, -3px); transition: transform .25s var(--sai); }
-  .faq details[open] summary::after { transform: rotate(225deg) translate(-3px, -3px); }
+  /* sinal de mais que gira e vira um x: circulo dourado com duas barras */
+  .faq summary::after { content: ""; flex: none; width: 32px; height: 32px; border-radius: 50%; background-color: var(--ouro-claro);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 10v12M10 16h12' stroke='%231B2F48' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-size: 32px; transition: transform .3s var(--sai), background-color .2s; }
+  .faq details[open] summary::after { transform: rotate(45deg); background-color: var(--ouro-suave); }
   .faq summary:hover { color: var(--ouro-texto); }
-  .faq details p { padding: 0 24px 22px; color: var(--tinta); max-width: 62ch; }
+  .faq details p { padding: 0 24px 24px; max-width: 60ch; color: var(--tinta); }
 
   /* ---------- Chamada final ---------- */
   .final { padding: var(--secao) 0; }
-  .faixa-final { background: var(--ouro-suave); border-radius: 28px; padding: clamp(36px, 6vw, 72px); display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 32px; align-items: center; }
-  .faixa-final h2 { max-width: 18ch; }
+  .faixa-final { background: var(--ouro-suave); border-radius: 28px; padding: clamp(32px, 5.5vw, 72px); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 40px 64px; align-items: center; }
   .faixa-final .intro { margin-top: 14px; }
-  .faixa-final .botoes { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+  .vagas { margin-top: 22px; padding-left: 16px; border-left: 4px solid var(--ouro); font-size: var(--t4); font-weight: 600; max-width: 44ch; }
+  .vagas strong { color: var(--ouro-texto); }
+  .faixa-final .botoes { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 32px; }
   .faixa-final .botoes p { font-size: var(--t5); color: var(--tinta-2); }
-  .faixa-final .botoes a:not(.botao) { font-weight: 600; }
+  .faixa-final .botoes a:not(.botao) { font-weight: 600; color: var(--tinta); }
+  .pede { background: var(--branco); border-radius: 22px; padding: 32px; }
+  .pede ul { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 14px; }
+  .pede li { display: grid; grid-template-columns: 28px 1fr; gap: 14px; align-items: start; }
+  .pede li::before { content: ""; width: 28px; height: 28px; border-radius: 50%; margin-top: -2px; background-color: var(--ouro-suave);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cpath d='M8.5 14.5l3.6 3.6 7.4-8' fill='none' stroke='%237A5E33' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-size: 28px; }
+  .pede li span { display: block; font-size: var(--t5); color: var(--tinta-2); }
+  .pede li.extra::before { background-color: var(--tinta);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cpath d='M14 20s-6-3.7-6-8a3.3 3.3 0 0 1 6-1.9A3.3 3.3 0 0 1 20 12c0 4.3-6 8-6 8z' fill='%23D6B57A'/%3E%3C/svg%3E"); }
 
   /* ---------- Rodape ---------- */
   .rodape { background: var(--tinta); color: #D5DCE6; padding: 64px 0 56px; font-size: var(--t5); }
@@ -294,6 +335,8 @@
     .passos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 24px; }
     .passo:nth-child(2)::after { display: none; }
     .duvidas .conteiner { grid-template-columns: 1fr; }
+    .duvidas-lado { position: static; }
+    .faixa-final { grid-template-columns: 1fr; }
   }
   /* ---------- Celular ---------- */
   @media (max-width: 760px) {
@@ -305,7 +348,9 @@
     .topo { padding-top: 24px; }
     .topo .conteiner { grid-template-columns: 1fr; }
     .semana { max-width: 440px; margin: 0 auto; width: 100%; }
-    .cartao-vivo { position: relative; top: auto; left: auto; margin: 16px auto 0; }
+    .palco { padding: 32px 16px 20px; }
+    .cartao-social { position: relative; right: auto; bottom: auto; margin-top: 16px; max-width: none; }
+    .fatos { grid-template-columns: 1fr; }
     .cabeca-secao { grid-template-columns: 1fr; margin-bottom: 32px; }
     .esp { grid-template-columns: 72px minmax(0, 1fr); gap: 12px 18px; padding: 18px 0; }
     .esp .ilustra { width: 72px; height: 72px; }
@@ -361,17 +406,32 @@
     <div class="conteiner">
       <div>
         <h1 id="titulo" data-revela>Cuidado perto de casa</h1>
-        <p class="intro" data-revela style="--n:1">Psicologia, nutrição e fisioterapia no Tatuapé, Zona Leste de São Paulo. Veja os horários livres, marque pelo site e confirme ou cancele com um clique. Às 16h e 17h, atendimento social a valor simbólico.</p>
-        <div class="topo-acoes" data-revela style="--n:2">
+        <p class="intro" data-revela style="--n:1">Clínica no Tatuapé, Zona Leste de São Paulo. Veja os horários livres, marque pelo site e confirme ou cancele com um clique.</p>
+        <ul class="topo-esp" data-revela style="--n:2" aria-label="Especialidades">
+          <li><a href="#especialidades"><svg aria-hidden="true"><use href="#i-psico"/></svg>Psicologia</a></li>
+          <li><a href="#especialidades"><svg aria-hidden="true"><use href="#i-nutri"/></svg>Nutrição</a></li>
+          <li><a href="#especialidades"><svg aria-hidden="true"><use href="#i-fisio"/></svg>Fisioterapia</a></li>
+        </ul>
+        <div class="topo-acoes" data-revela style="--n:3">
           <a class="botao" href="/entrar#cadastro">Agendar consulta</a>
           <a class="link-seta" href="#especialidades">Ver horários livres <span aria-hidden="true">→</span></a>
         </div>
-        <p class="garantia" data-revela style="--n:3"><b>Cadastro em dois minutos.</b> Segunda a sexta, das 10h às 17h.</p>
+        <ul class="fatos" data-revela style="--n:4">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span><b>Seg a sex</b>10h às 17h</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span><b>Rua Tuiuti, 1200</b>Tatuapé</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-8-4.9-8-10.6A4.4 4.4 0 0 1 12 6.8a4.4 4.4 0 0 1 8 2.6C20 15.1 12 20 12 20z"/></svg><span><b>Social</b>16h e 17h</span></li>
+        </ul>
       </div>
 
       <!-- O coracao da logo vira a semana da clinica: 5 dias x 8 horarios, as duas ultimas linhas sao do social -->
+      <div class="palco" data-revela style="--n:1">
+      <div class="cartao-vivo" aria-live="polite">
+        <div><p><span class="ponto" aria-hidden="true"></span>Próximo horário livre</p>
+        <strong id="proximoGeral">Psicologia, segunda às 10h</strong></div>
+        <a href="/entrar#cadastro">Marcar este horário</a>
+      </div>
       <figure class="semana" id="semana" aria-label="Coração da NYLT formado pela semana da clínica: segunda a sexta, das 10h às 17h, com 16h e 17h em dourado, reservadas ao atendimento social">
-        <svg viewBox="0 0 520 470" aria-hidden="true">
+        <svg viewBox="0 0 520 470" aria-hidden="true" style="overflow: visible">
           <defs>
             <clipPath id="coracao"><path d="M260 452C140 372 24 290 24 168 24 96 82 40 152 40c46 0 84 24 108 60 24-36 62-60 108-60 70 0 128 56 128 128 0 122-116 204-236 284z"/></clipPath>
           </defs>
@@ -379,9 +439,8 @@
           <path d="M260 452C140 372 24 290 24 168 24 96 82 40 152 40c46 0 84 24 108 60 24-36 62-60 108-60 70 0 128 56 128 128 0 122-116 204-236 284z" fill="none" stroke="#B08D5B" stroke-width="6"/>
           <g id="rotulos"></g>
         </svg>
-        <div class="cartao-vivo" aria-live="polite">
-          <p><span class="ponto" aria-hidden="true"></span>Próximo horário livre</p>
-          <strong id="proximoGeral">Psicologia, segunda às 10h</strong>
+        <div class="cartao-social" aria-live="polite">
+          <strong id="vagasSocialTopo">30 vagas</strong><span>no atendimento social esta semana, às 16h e 17h</span>
         </div>
         <div class="legenda-semana" aria-hidden="true">
           <p>Cada quadradinho é um horário da semana, de segunda a sexta.</p>
@@ -393,6 +452,7 @@
           </ul>
         </div>
       </figure>
+      </div>
     </div>
   </section>
 
@@ -510,16 +570,35 @@
   <!-- ===== Perguntas frequentes ===== -->
   <section class="duvidas" id="duvidas" aria-labelledby="duvTitulo">
     <div class="conteiner">
-      <div data-revela>
-        <h2 id="duvTitulo">Dúvidas frequentes</h2>
-        <p class="intro">Não achou a sua? Ligue para <a href="tel:+551120914400">(11) 2091-4400</a>, de segunda a sexta, das 10h às 17h.</p>
+      <div class="duvidas-lado">
+        <h2 id="duvTitulo" data-revela>Dúvidas frequentes</h2>
+        <p class="intro" data-revela style="--n:1">Não achou a sua pergunta? A recepção responde por telefone.</p>
+        <div class="recepcao" data-revela style="--n:2">
+          <h3>Fale com a recepção</h3>
+          <p class="status" id="statusRecepcao">Segunda a sexta, das 10h às 17h</p>
+          <a class="fone" href="tel:+551120914400">(11) 2091-4400</a>
+          <dl>
+            <dt>Horário</dt><dd>Segunda a sexta, das 10h às 17h</dd>
+            <dt>Endereço</dt><dd>Rua Tuiuti, 1200, Tatuapé</dd>
+          </dl>
+        </div>
       </div>
-      <div class="faq" data-revela style="--n:1">
-        <details open><summary>Quanto custa uma consulta?</summary><p>As consultas particulares, de 10h às 15h, têm o valor informado pela recepção na hora de confirmar. No atendimento social, às 16h e 17h, a família paga um valor simbólico.</p></details>
-        <details><summary>Como entro no atendimento social?</summary><p>No cadastro, marque a opção de atendimento social. Depois, na sua área, informe a renda por pessoa da família para entrar na fila. A recepção avalia a urgência e chama pela ordem de pontos.</p></details>
-        <details><summary>Posso cancelar ou remarcar?</summary><p>Sim. Em Minhas consultas, cancele com um clique e marque outro horário. Avise o quanto antes: o horário volta para a agenda e outra pessoa pode usar.</p></details>
-        <details><summary>Preciso confirmar a consulta?</summary><p>Pedimos que confirme pelo site perto do dia. Assim a recepção sabe quem vem e consegue oferecer os horários de quem não puder ir.</p></details>
-        <details><summary>O que levar na primeira consulta?</summary><p>Um documento com foto e, se tiver, exames e receitas recentes. Chegue dez minutos antes para a recepção conferir o seu cadastro.</p></details>
+      <div>
+        <div class="faq-grupo" data-revela>
+          <h3>Valores e atendimento social</h3>
+          <div class="faq">
+            <details open><summary>Quanto custa uma consulta?</summary><p>As consultas particulares, de 10h às 15h, têm o valor informado pela recepção na hora de confirmar. No atendimento social, às 16h e 17h, a família paga um valor simbólico.</p></details>
+            <details><summary>Como entro no atendimento social?</summary><p>No cadastro, marque a opção de atendimento social. Depois, na sua área, informe a renda por pessoa da família para entrar na fila. A recepção avalia a urgência e chama pela ordem de pontos.</p></details>
+          </div>
+        </div>
+        <div class="faq-grupo" data-revela style="--n:1">
+          <h3>Sua consulta</h3>
+          <div class="faq">
+            <details><summary>Posso cancelar ou remarcar?</summary><p>Sim. Em Minhas consultas, cancele com um clique e marque outro horário. Avise o quanto antes: o horário volta para a agenda e outra pessoa pode usar.</p></details>
+            <details><summary>Preciso confirmar a consulta?</summary><p>Pedimos que confirme pelo site perto do dia. Assim a recepção sabe quem vem e consegue oferecer os horários de quem não puder ir.</p></details>
+            <details><summary>O que levar na primeira consulta?</summary><p>Um documento com foto e, se tiver, exames e receitas recentes. Chegue dez minutos antes para a recepção conferir o seu cadastro.</p></details>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -527,14 +606,25 @@
   <!-- ===== Chamada final ===== -->
   <section class="final" aria-labelledby="finalTitulo">
     <div class="conteiner">
-      <div class="faixa-final" data-revela>
+      <div class="faixa-final">
         <div>
-          <h2 id="finalTitulo">Comece pelo cadastro</h2>
-          <p class="intro">Leva dois minutos: nome, telefone, idade e uma senha. Depois é só escolher o horário.</p>
+          <h2 id="finalTitulo" data-revela>Comece pelo cadastro</h2>
+          <p class="intro" data-revela style="--n:1">Leva dois minutos. Depois é só escolher o horário na sua área.</p>
+          <p class="vagas" id="vagasSemana" data-revela style="--n:2">Há horários livres nesta semana.</p>
+          <div class="botoes" data-revela style="--n:3">
+            <a class="botao" href="/entrar#cadastro">Cadastrar-se</a>
+            <p>Já tem cadastro? <a href="/entrar">Entrar</a></p>
+          </div>
         </div>
-        <div class="botoes">
-          <a class="botao" href="/entrar#cadastro">Cadastrar-se</a>
-          <p>Já tem cadastro? <a href="/entrar">Entrar</a></p>
+        <div class="pede" data-revela style="--n:2">
+          <h3>O cadastro pede só isto</h3>
+          <ul>
+            <li><p>Nome completo</p></li>
+            <li><p>Telefone com DDD<span>É com ele que você entra no site.</span></p></li>
+            <li><p>Idade</p></li>
+            <li><p>Uma senha<span>Pelo menos 6 caracteres.</span></p></li>
+            <li class="extra"><p>Atendimento social, se precisar<span>Marque a opção e entre na fila das 16h e 17h.</span></p></li>
+          </ul>
         </div>
       </div>
     </div>
@@ -584,6 +674,13 @@
         grade.appendChild(r);
       }
     }
+    NYLT.DIAS.forEach((nome, dia) => {
+      const t = document.createElementNS(svgNS, 'text');
+      t.setAttribute('x', x0 + dia * (larg + gap) + larg / 2); t.setAttribute('y', 22);
+      t.setAttribute('text-anchor', 'middle'); t.setAttribute('class', 'dia-rotulo');
+      t.textContent = nome.slice(0, 3);
+      rotulos.appendChild(t);
+    });
   }
 
   /* ---------- Proximo horario livre de cada especialidade ---------- */
@@ -600,13 +697,47 @@
       ? `${melhor.nome}, ${NYLT.DIAS[melhor.s.d].toLowerCase()} às ${NYLT.hora(melhor.s.h)}h`
       : 'Semana cheia, fale com a recepção';
     desenharSemana();
+    contarVagas(d);
+  }
+
+  /* ---------- Chamada final: quantos horarios ainda estao livres na semana ---------- */
+  function contarVagas(d) {
+    let comuns = 0, social = 0;
+    NYLT.PROFISSIONAIS.forEach((_, p) => d.agenda[p].forEach(hs => hs.forEach((v, h) => {
+      if (!v) { if (h >= NYLT.PRIMEIRO_SOCIAL) social++; else comuns++; }
+    })));
+    $('vagasSocialTopo').textContent = social === 1 ? '1 vaga' : social ? `${social} vagas` : 'Sem vagas';
+    const el = $('vagasSemana');
+    if (comuns + social === 0) { el.textContent = 'A semana está cheia. Cadastre-se e a recepção avisa quando abrir um horário.'; return; }
+    el.innerHTML = `Esta semana ainda há <strong>${comuns} ${comuns === 1 ? 'horário livre' : 'horários livres'}</strong> de 10h às 15h`
+      + (social ? ` e <strong>${social}</strong> no atendimento social.` : '.');
   }
   atualizarHorarios();
-  // se a recepcao ou um paciente marcar uma consulta em outra aba, a pagina se atualiza
-  addEventListener('storage', e => { if (e.key === NYLT.CHAVE) atualizarHorarios(); });
 
-  /* ---------- Paciente que ja entrou ve "Minha area" ---------- */
-  if (NYLT.pacienteAtual()) $('acoes').innerHTML = '<a class="botao pequeno" href="/paciente">Minha área</a>';
+  /* ---------- Recepcao aberta ou fechada agora (horario de Sao Paulo) ---------- */
+  function statusRecepcao() {
+    const partes = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Sao_Paulo', weekday: 'short', hour: 'numeric', hourCycle: 'h23' })
+      .formatToParts(new Date()).map(x => [x.type, x.value]));
+    const dia = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(partes.weekday);
+    const hora = +partes.hour;
+    const util = dia >= 1 && dia <= 5;
+    const aberta = util && hora >= 10 && hora < 17;
+    const el = $('statusRecepcao');
+    el.classList.toggle('aberta', aberta);
+    if (aberta) { el.textContent = 'Aberta agora, até as 17h'; return; }
+    const quando = util && hora < 10 ? 'hoje' : (dia >= 0 && dia <= 4) ? 'amanhã' : 'segunda';
+    el.textContent = `Fechada agora. Abre ${quando} às 10h`;
+  }
+  statusRecepcao();
+  setInterval(statusRecepcao, 60000);
+  /* ---------- Dados do banco: horarios livres e quem ja entrou ---------- */
+  NYLT.carregar().then(() => {
+    atualizarHorarios();
+    // paciente que ja entrou ve "Minha area"
+    if (NYLT.pacienteAtual()) $('acoes').innerHTML = '<a class="botao pequeno" href="/paciente">Minha área</a>';
+  }).catch(() => {});
+  // quando a recepcao ou outro paciente marca uma consulta, a pagina se atualiza
+  NYLT.aoMudar(atualizarHorarios);
 
   /* ---------- Simulador da fila social (mesma regra do sistema, sem a urgencia) ---------- */
   function simular() {
