@@ -1,0 +1,23 @@
+# Mantem o banco acordado: o plano gratis do Supabase pausa o projeto depois de 7 dias sem acesso.
+# A cada 3 dias, esta acao le a ocupacao publica da semana (a mesma leitura que a landing faz).
+name: Manter o banco ativo
+
+on:
+  schedule:
+    - cron: "0 12 */3 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  acessar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ler a agenda publica no Supabase
+        run: |
+          curl -sf -X POST "https://hfeppfkzegclsnxfsczv.supabase.co/rest/v1/rpc/estado_publico" \
+            -H "apikey: sb_publishable_JXosdkJL2xkzSpnpGpce6g_j85yYLBf" \
+            -H "Content-Type: application/json" \
+            -d '{}' -o /dev/null
+          echo "Banco respondeu."
