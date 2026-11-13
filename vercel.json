@@ -2,11 +2,9 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
-    { "source": "/", "destination": "/home", "permanent": false },
-    { "source": "/index", "destination": "/home", "permanent": true },
+    { "source": "/", "destination": "/entrar", "permanent": false },
+    { "source": "/home", "destination": "/entrar", "permanent": false },
+    { "source": "/index", "destination": "/entrar", "permanent": true },
     { "source": "/nylt_agenda", "destination": "/admin", "permanent": true }
-  ],
-  "rewrites": [
-    { "source": "/home", "destination": "/index" }
   ]
 }

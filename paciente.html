@@ -167,7 +167,7 @@
 </svg>
 <header class="topo">
   <div class="topo-linha">
-    <a class="marca" href="/home" aria-label="NYLT, voltar para o site"><img src="assets/logo-marca-transparente.webp" alt="" width="200" height="141"></a>
+    <a class="marca" href="/paciente" aria-label="NYLT, minha área"><img src="assets/logo-marca-transparente.webp" alt="" width="200" height="141"></a>
     <nav aria-label="Minha área">
       <a href="#agendar" data-aba="agendar">Agendar consulta</a>
       <a href="#consultas" data-aba="consultas">Minhas consultas</a>
@@ -284,7 +284,7 @@
 
   // so entra quem fez login (conferido no banco, no fim do script)
   let pac = null;
-  $('btnSair').onclick = () => { NYLT.sair(); location.href = '/home'; };
+  $('btnSair').onclick = () => { NYLT.sair(); location.href = '/entrar'; };
 
   let toastTimer;
   function aviso(msg, erro) {
